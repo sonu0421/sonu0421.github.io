@@ -1,0 +1,1848 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Sonu Kumar — Web & AI Automation Developer</title>
+<meta name="description" content="Sonu Kumar — Web Developer & AI Automation Engineer. I build digital systems that think & automate: React frontends, n8n pipelines, AI assistants."/>
+<meta property="og:title" content="Sonu Kumar — Web Developer & AI Automation Engineer"/>
+<meta property="og:description" content="I build digital systems that think & automate: React frontends, n8n pipelines, AI assistants."/>
+<meta property="og:type" content="website"/>
+<meta name="description" content="Sonu Kumar — Web Developer & AI Automation Engineer. I build digital systems that think & automate. React, n8n, Node.js, AI agents."/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          obsidian: '#050507',
+          cardBg: '#0b0c10',
+          surface: '#111217',
+          surfaceAlt: '#17181f',
+          borderSubtle: '#22232b',
+          borderWarm: '#383227',
+          amberAccent: '#f59e0b',
+          amberLight: '#fbbf24',
+          goldChampagne: '#fef3c7',
+          bronzeMuted: '#926a38',
+          /* Desktop Obsidian tokens */
+          background: '#09090b',
+          'surface-dim': '#0c0c0f',
+          'surface-container-lowest': '#09090b',
+          'surface-container-low': '#0f0f12',
+          'surface-container': '#121215',
+          'surface-container-high': '#18181b',
+          'surface-variant': '#18181b',
+          'surface-bright': '#18181b',
+          'surface-container-highest': '#1e1e22',
+          'on-surface': '#fafafa',
+          'on-surface-variant': '#a1a1aa',
+          'on-secondary-container': '#a1a1aa',
+          secondary: '#71717a',
+          'secondary-container': '#27272a',
+          outline: '#52525b',
+          'outline-variant': '#27272a',
+          primary: '#a78bfa',
+          tertiary: '#34d399'
+        },
+        fontFamily: {
+          mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
+          sans: ['Space Grotesk', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          headline: ['Geist', 'Space Grotesk', 'sans-serif'],
+          body: ['Geist', 'Space Grotesk', 'sans-serif'],
+          label: ['Geist', 'sans-serif'],
+        },
+        boxShadow: {
+          'amber-subtle': '0 0 35px -8px rgba(245, 158, 11, 0.22)',
+          'amber-glow': '0 0 25px 2px rgba(245, 158, 11, 0.35)',
+          'warm-card': '0 20px 40px -15px rgba(0, 0, 0, 0.75)'
+        }
+      }
+    }
+  }
+</script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+  body {
+    background-color: #050507;
+    color: #f1f5f9;
+    font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .atelier-grid {
+    background-size: 40px 40px;
+    background-image:
+      linear-gradient(to right, rgba(245, 158, 11, 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(245, 158, 11, 0.03) 1px, transparent 1px);
+  }
+  .warm-aura {
+    background: radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.09) 0%, rgba(251, 191, 36, 0.03) 40%, transparent 70%);
+  }
+  /* 3D orbital canvas */
+  #orbitCanvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  #orbitLabels { position: absolute; inset: 0; pointer-events: none; z-index: 20; }
+  #orbitLabels .orbit-node { pointer-events: auto; position: absolute; transform: translate(-50%, -50%); transition: opacity .25s; white-space: nowrap; }
+  .orbit-core-label { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 15; pointer-events: auto; cursor: pointer; }
+  @keyframes corePulse {
+    0%, 100% { box-shadow: 0 0 20px -2px rgba(245,158,11,.3), inset 0 0 12px rgba(245,158,11,.2); transform: translate(-50%,-50%) scale(1); }
+    50% { box-shadow: 0 0 35px 5px rgba(251,191,36,.55), inset 0 0 20px rgba(251,191,36,.4); transform: translate(-50%,-50%) scale(1.05); }
+  }
+  .animate-core-pulse { animation: corePulse 3.5s ease-in-out infinite; }
+  /* 3D tilt cards */
+  .tilt-card { transform-style: preserve-3d; will-change: transform; transition: transform .25s ease, border-color .3s, box-shadow .3s; }
+  .tilt-inner { transform: translateZ(30px); }
+  /* shimmer buttons */
+  .btn-shimmer { position: relative; overflow: hidden; }
+  .btn-shimmer::after {
+    content: ''; position: absolute; top: -50%; left: -60%; width: 40%; height: 200%;
+    background: linear-gradient(60deg, transparent, rgba(255,255,255,.22), transparent);
+    transform: rotate(25deg); transition: none;
+  }
+  .btn-shimmer:hover::after { left: 140%; transition: left .75s ease-in-out; }
+  /* pipeline beam */
+  @keyframes pipelineFlow { 0% { background-position: 0% 0%; } 100% { background-position: 0% 200%; } }
+  .pipeline-wire {
+    background: linear-gradient(180deg, rgba(56,50,39,.8) 0%, rgba(245,158,11,.95) 50%, rgba(56,50,39,.8) 100%);
+    background-size: 100% 200%; animation: pipelineFlow 2.8s linear infinite;
+  }
+  /* typing indicator */
+  @keyframes typingDot { 0%, 60%, 100% { transform: translateY(0); opacity: .4; } 30% { transform: translateY(-4px); opacity: 1; } }
+  .typing-dot { animation: typingDot 1.2s infinite; }
+  .typing-dot:nth-child(2) { animation-delay: .15s; } .typing-dot:nth-child(3) { animation-delay: .3s; }
+  /* reveal on scroll */
+  .reveal-on-scroll { opacity: 0; transform: translateY(18px); transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1); }
+  .reveal-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
+  details summary::-webkit-details-marker { display: none; }
+  /* Experience timeline: scroll-linked 3D glow rail */
+  .exp-rail-fill { position:absolute; top:8px; left:4px; width:3px; height:0; border-radius:3px; z-index:1;
+    background:linear-gradient(to bottom,#fde68a,#fbbf24 60%,#f59e0b);
+    box-shadow:0 0 10px rgba(245,158,11,.75), 0 0 22px rgba(245,158,11,.35); }
+  .exp-rail-fill[data-rail="d"] { left:6px; }
+  .exp-comet { position:absolute; top:8px; width:13px; height:13px; border-radius:9999px; background:#fef3c7; z-index:2; pointer-events:none;
+    box-shadow:0 0 12px 3px rgba(253,230,138,.95), 0 0 28px 8px rgba(245,158,11,.45);
+    transform:translate(-50%,-50%); }
+  .exp-comet[data-rail="m"] { left:5.5px; }
+  .exp-comet[data-rail="d"] { left:7.5px; }
+  .exp-dot { transition:box-shadow .45s ease, background-color .45s ease, transform .45s ease; }
+  .exp-dot.exp-lit { background:#fde68a; transform:scale(1.25);
+    box-shadow:0 0 16px 5px rgba(251,191,36,.9), 0 0 34px 10px rgba(245,158,11,.4); }
+  /* Hero typewriter */
+  .tw-caret { display:inline-block; width:3px; height:1.05em; margin-left:3px; vertical-align:-0.18em; border-radius:2px; background:#fbbf24; box-shadow:0 0 10px rgba(251,191,36,.9); animation:tw-blink .85s steps(1) infinite; }
+  @keyframes tw-blink { 50% { opacity:0; } }
+  .tw-glow { filter:drop-shadow(0 0 14px rgba(245,158,11,.4)); }
+  /* Desktop core orbit rings */
+  .tw-ring { position:absolute; inset:-14px; border:1px dashed rgba(251,191,36,.55); border-radius:9999px; animation:tw-spin 14s linear infinite; pointer-events:none; }
+  .tw-ring.r2 { inset:-26px; animation-duration:24s; animation-direction:reverse; border-color:rgba(245,158,11,.3); }
+  @keyframes tw-spin { to { transform:rotate(360deg); } }
+  #orbit-container-d { will-change:transform; }
+  /* Big headline typewriter */
+  .tw-headline { filter:drop-shadow(0 0 18px rgba(245,158,11,.22)); }
+  #tw-headline-d { min-height:3.3em; }
+  #tw-headline-m { min-height:3.4em; }
+  .tw-grad { background:linear-gradient(to right,#fbbf24,#fde68a,#f59e0b); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  /* Desktop: subtle grid pattern + traveling signal pulse */
+  .bg-grid-pattern {
+    background-image:
+      radial-gradient(rgba(245, 158, 11, 0.05) 1px, transparent 1px),
+      linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 32px 32px, 64px 64px, 64px 64px;
+  }
+  @keyframes pulseStream {
+    0% { transform: translateX(-100%); opacity: 0; }
+    20% { opacity: 1; } 80% { opacity: 1; }
+    100% { transform: translateX(500%); opacity: 0; }
+  }
+  .animate-signal-pulse { animation: pulseStream 4s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+  @keyframes desktopCorePulse {
+    0%, 100% { box-shadow: 0 0 25px rgba(245,158,11,.4), 0 0 60px rgba(217,119,6,.2); transform: translate(-50%,-50%) scale(1); }
+    50% { box-shadow: 0 0 45px rgba(245,158,11,.65), 0 0 90px rgba(217,119,6,.35); transform: translate(-50%,-50%) scale(1.04); }
+  }
+  .animate-desktop-core { animation: desktopCorePulse 3.5s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) {
+    .animate-core-pulse, .animate-desktop-core, .animate-signal-pulse, .pipeline-wire, .typing-dot { animation: none !important; }
+    .reveal-on-scroll { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .tilt-card { transform: none !important; }
+  }
+</style>
+</head>
+<body class="bg-obsidian text-slate-100 atelier-grid relative min-h-screen pb-20 antialiased selection:bg-amberAccent selection:text-black">
+<div class="warm-aura fixed top-0 left-0 right-0 h-[600px] pointer-events-none z-0"></div>
+
+<!-- BEGIN: NavigationHeader (Mobile) -->
+<header class="lg:hidden sticky top-0 z-50 backdrop-blur-2xl bg-obsidian/85 border-b border-borderWarm/60 px-5 py-4">
+  <div class="max-w-md md:max-w-5xl mx-auto flex items-center justify-between">
+    <a class="flex items-center gap-1.5 group tracking-wider" href="#">
+      <span class="text-lg font-bold tracking-tight text-white group-hover:text-amberAccent transition-colors">SONU<span class="text-amberAccent inline-block group-hover:rotate-45 transition-transform">.</span></span>
+    </a>
+    <nav class="hidden md:flex items-center gap-6 text-xs font-mono text-slate-400">
+      <a href="#about" class="hover:text-amberLight transition-colors">About</a>
+      <a href="#projects" class="hover:text-amberLight transition-colors">Work</a>
+      <a href="#contact" class="hover:text-amberLight transition-colors">Contact</a>
+    </nav>
+    <div class="flex items-center gap-3">
+      <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amberAccent/10 border border-amberAccent/25 text-amberLight text-[11px] font-mono font-medium">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amberAccent opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-amberAccent"></span>
+        </span>
+        <span>Available</span>
+      </div>
+      <a class="btn-shimmer text-xs font-mono font-medium px-3.5 py-1.5 rounded-md bg-surface border border-borderWarm/80 text-goldChampagne hover:border-amberAccent/70 hover:text-white active:scale-95 transition-all" href="#contact">Hire Me</a>
+    </div>
+  </div>
+</header>
+<!-- END: NavigationHeader (Mobile) -->
+<!-- BEGIN: NavigationHeader (Desktop) -->
+<header class="hidden lg:block fixed top-0 w-full z-50 bg-background/85 backdrop-blur-xl border-b border-outline-variant/80">
+  <div class="h-16 max-w-7xl mx-auto px-8 flex items-center justify-between gap-6">
+    <a class="flex items-baseline font-headline font-bold text-xl tracking-tight text-on-surface group" href="#">
+      <span class="group-hover:tracking-wider transition-all duration-300">SONU</span><span class="text-amber-400 ml-0.5 group-hover:text-amber-300 transition-colors">.</span>
+    </a>
+    <nav class="hidden md:flex items-center gap-8 text-sm tracking-wide">
+      <a class="text-on-surface-variant hover:text-white transition-colors py-4 relative group" href="#d-about">About<span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-400/50 group-hover:w-full transition-all duration-300"></span></a>
+      <a class="text-on-surface font-medium border-b-2 border-amber-400 py-4" href="#d-projects">Work</a>
+      <a class="text-on-surface-variant hover:text-white transition-colors py-4 relative group" href="#d-experience">Experience<span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-400/50 group-hover:w-full transition-all duration-300"></span></a>
+            <a class="text-on-surface-variant hover:text-white transition-colors py-4 relative group" href="#d-architecture">Architecture<span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-400/50 group-hover:w-full transition-all duration-300"></span></a>
+      <a class="text-on-surface-variant hover:text-white transition-colors py-4 relative group" href="#d-tech-stack">Tech Stack<span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-400/50 group-hover:w-full transition-all duration-300"></span></a>
+      <a class="text-on-surface-variant hover:text-white transition-colors py-4 relative group" href="#d-contact">Contact<span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-400/50 group-hover:w-full transition-all duration-300"></span></a>
+    </nav>
+    <div class="flex items-center gap-4">
+      <div class="hidden sm:inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container border border-outline-variant text-xs text-on-surface-variant font-label">
+        <span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span>
+        <span class="text-on-surface font-mono">Available for work</span>
+      </div>
+      <a class="inline-flex items-center justify-center px-4 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 active:scale-95 text-slate-950 text-xs font-semibold tracking-wide transition-all duration-200 shadow-md shadow-amber-400/20 hover:shadow-amber-400/40" href="#d-contact"><span>Hire Me</span></a>
+    </div>
+  </div>
+</header>
+<!-- END: NavigationHeader (Desktop) -->
+
+<main class="mx-auto relative z-10">
+<div class="lg:hidden">
+<div class="max-w-md mx-auto px-4 space-y-20 pt-6">
+
+<!-- BEGIN: HeroSection -->
+<section class="space-y-6 reveal-on-scroll" data-purpose="hero">
+  <div class="relative rounded-2xl bg-cardBg border border-borderWarm/80 p-5 md:p-8 shadow-warm-card overflow-hidden group hover:border-amberAccent/40 transition-colors duration-500">
+    <div class="absolute top-0 right-0 w-44 h-44 bg-amberAccent/5 rounded-full blur-3xl pointer-events-none group-hover:bg-amberAccent/10 transition-colors duration-700"></div>
+    <div class="flex items-center justify-between pb-5 border-b border-borderSubtle">
+      <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-surface border border-borderWarm/50 text-[11px] font-mono text-slate-300">
+        <span class="w-1.5 h-1.5 rounded-full bg-amberAccent inline-block animate-pulse"></span>
+        <span>Hello, I'm Sonu Kumar</span>
+      </div>
+      <span class="text-[11px] font-mono text-bronzeMuted tracking-widest">FOLIO • 2026</span>
+    </div>
+
+    <div class="md:grid md:grid-cols-2 md:gap-8 md:items-center pt-5">
+      <div>
+        <h1 id="tw-headline-m" class="tw-headline text-4xl md:text-5xl font-extrabold uppercase leading-[1.05] tracking-tight text-white"></h1>
+        <div class="mt-5 flex items-center gap-4 rounded-xl bg-surface/60 border border-borderSubtle p-4">
+          <div class="w-14 h-14 rounded-lg bg-gradient-to-br from-amberAccent/30 to-bronzeMuted/20 border border-amberAccent/40 flex items-center justify-center text-2xl font-bold text-amberLight flex-shrink-0">SK</div>
+          <div>
+            <p class="text-[11px] font-mono uppercase tracking-widest text-amberAccent">B.Tech CSE Graduate</p>
+            <p class="text-xs text-slate-300 italic mt-1">"Turning repetitive ideas into self-operating automated solutions."</p>
+            <p class="text-[11px] font-mono text-slate-500 mt-1">— Sonu Kumar</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3D CORE ECOSYSTEM -->
+      <div class="mt-6 md:mt-0 rounded-xl bg-obsidian/60 border border-borderWarm/60 overflow-hidden">
+        <div class="flex items-center justify-between px-4 pt-3">
+          <span class="text-[10px] font-mono uppercase tracking-widest text-slate-400">Core Ecosystem Architecture</span>
+          <span class="text-[10px] font-mono text-amberLight flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>SYNC ACTIVE</span>
+        </div>
+        <div id="orbitalEcosystem" class="relative h-[320px] md:h-[380px] cursor-grab">
+          <canvas id="orbitCanvas"></canvas>
+          <div id="orbitLabels"></div>
+          <button onclick="toggleTelemetryDetail()" aria-label="Sonu Kumar" class="orbit-core-label animate-core-pulse w-20 h-20 rounded-full bg-obsidian border-2 border-amberAccent/70 flex flex-col items-center justify-center">
+            <span class="text-amberLight font-extrabold text-xl leading-none tracking-tight">SONU</span>
+          </button>
+        </div>
+        <div class="mt-1 min-h-[26px] flex items-center justify-center pb-3 px-3" id="nodeTelemetryStatus">
+          <p class="text-[11px] font-mono text-slate-400 italic text-center">[Tap any satellite node for live telemetry details]</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-2.5 pt-5">
+      <a class="btn-shimmer py-2.5 px-3 rounded-lg bg-amberAccent text-black font-semibold text-xs text-center flex items-center justify-center gap-1.5 shadow-amber-subtle hover:bg-amberLight hover:shadow-amber-glow transition-all active:scale-95" href="#projects">
+        <span>View Work</span>
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+      </a>
+      <a class="btn-shimmer py-2.5 px-3 rounded-lg bg-cardBg border border-borderWarm text-slate-200 font-semibold text-xs text-center flex items-center justify-center gap-1.5 hover:border-amberAccent/60 hover:text-white transition-all active:scale-95" href="Sonu_Kumar_Resume.pdf" download>
+        <span>Resume</span>
+        <svg class="w-3.5 h-3.5 text-amberAccent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+<!-- END: HeroSection -->
+
+<!-- BEGIN: AboutSection -->
+<section class="space-y-4 reveal-on-scroll" data-purpose="about" id="about">
+  <div class="flex items-baseline justify-between border-b border-borderWarm/60 pb-2">
+    <div class="flex items-center gap-2">
+      <span class="font-mono text-xs text-amberAccent font-bold">01.</span>
+      <h2 class="text-lg font-bold uppercase tracking-wider text-white">Who I Am & Focus</h2>
+    </div>
+    <span class="text-[10px] font-mono text-slate-500 uppercase tracking-widest">Philosophy</span>
+  </div>
+  <p class="text-sm text-slate-300 leading-relaxed">
+    I am a Computer Science graduate specializing in modern web engineering and autonomous AI agent workflows. Rather than static websites, I design systems that synchronize data across platforms, handle user intents, and perform complex automation without human friction.
+  </p>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 pt-2">
+    <div class="tilt-card group p-3.5 rounded-xl bg-cardBg border border-borderSubtle space-y-1 hover:border-amberAccent/60 hover:shadow-amber-subtle">
+      <div class="tilt-inner text-amberLight font-mono text-xs flex items-center justify-between">
+        <span class="flex items-center gap-1.5">⚡ Web Apps</span>
+        <span class="w-1.5 h-1.5 rounded-full bg-amberAccent/40 group-hover:bg-amberLight transition-colors"></span>
+      </div>
+      <p class="tilt-inner text-xs text-slate-400 group-hover:text-slate-300 transition-colors">High-performance React & Next.js client experiences.</p>
+    </div>
+    <div class="tilt-card group p-3.5 rounded-xl bg-cardBg border border-borderSubtle space-y-1 hover:border-amberAccent/60 hover:shadow-amber-subtle">
+      <div class="tilt-inner text-amberAccent font-mono text-xs flex items-center justify-between">
+        <span class="flex items-center gap-1.5">🤖 AI Automation</span>
+        <span class="w-1.5 h-1.5 rounded-full bg-amberAccent/40 group-hover:bg-amberAccent transition-colors"></span>
+      </div>
+      <p class="tilt-inner text-xs text-slate-400 group-hover:text-slate-300 transition-colors">Autonomous triggers, GPT triage & n8n pipeline orchestration.</p>
+    </div>
+    <div class="tilt-card group p-3.5 rounded-xl bg-cardBg border border-borderSubtle space-y-1 hover:border-amberAccent/60 hover:shadow-amber-subtle">
+      <div class="tilt-inner text-amberAccent font-mono text-xs flex items-center justify-between">
+        <span class="flex items-center gap-1.5">⚙️ Workflow Eng</span>
+        <span class="w-1.5 h-1.5 rounded-full bg-amberAccent/40 group-hover:bg-amberAccent transition-colors"></span>
+      </div>
+      <p class="tilt-inner text-xs text-slate-400 group-hover:text-slate-300 transition-colors">Zero-error data flows, cron triggers & microservice sync.</p>
+    </div>
+    <div class="tilt-card group p-3.5 rounded-xl bg-cardBg border border-borderSubtle space-y-1 hover:border-amberAccent/60 hover:shadow-amber-subtle">
+      <div class="tilt-inner text-amberLight font-mono text-xs flex items-center justify-between">
+        <span class="flex items-center gap-1.5">🔌 API Systems</span>
+        <span class="w-1.5 h-1.5 rounded-full bg-amberAccent/40 group-hover:bg-amberLight transition-colors"></span>
+      </div>
+      <p class="tilt-inner text-xs text-slate-400 group-hover:text-slate-300 transition-colors">REST, Webhooks, Supabase real-time architectures.</p>
+    </div>
+  </div>
+</section>
+<!-- END: AboutSection -->
+
+
+<!-- BEGIN: ProjectsSection -->
+<section class="space-y-5 reveal-on-scroll" data-purpose="featured-projects" id="projects">
+  <div class="flex items-baseline justify-between border-b border-borderWarm/60 pb-2">
+    <div class="flex items-center gap-2">
+      <span class="font-mono text-xs text-amberAccent font-bold">02.</span>
+      <h2 class="text-lg font-bold uppercase tracking-wider text-white">Selected Work</h2>
+    </div>
+    <span class="text-xs font-mono text-amberLight/70">3 Featured</span>
+  </div>
+  <div class="space-y-4 md:grid md:grid-cols-3 md:gap-4 md:space-y-0">
+
+    <!-- Project 1: Autonomous Research Agent -->
+    <article data-deploy="https://autonomous-research-agent-ioye.onrender.com" data-name="Autonomous Research Agent" class="tilt-card group rounded-xl bg-cardBg border border-borderWarm/70 overflow-hidden hover:border-amberAccent/60 hover:shadow-amber-subtle">
+      <div class="tilt-inner">
+      <div class="px-4 py-3 bg-surface border-b border-borderSubtle flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <span class="text-xs font-mono font-bold text-amberAccent">01</span>
+          <span class="text-[11px] font-mono text-amberLight uppercase tracking-wider">AI Research</span>
+        </div>
+        <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-amberAccent/10 text-amberAccent border border-amberAccent/20 flex items-center gap-1">
+          <span class="w-1 h-1 rounded-full bg-amberAccent animate-ping"></span> Production
+        </span>
+      </div>
+      <!-- Real screenshot: Research Agent -->
+      <div class="relative w-full h-44 overflow-hidden bg-obsidian border-b border-borderSubtle group/img">
+        <img src="images/research-agent.png" alt="Autonomous Research Agent dashboard screenshot" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"/>
+        <div class="absolute bottom-2 left-3 px-2 py-0.5 rounded bg-obsidian/85 backdrop-blur-md border border-borderWarm text-[10px] font-mono text-amberLight flex items-center gap-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> AI Engine Active
+        </div>
+      </div>
+      <div class="p-4 space-y-3">
+        <h3 class="text-base font-bold text-white tracking-tight group-hover:text-amberLight transition-colors">Autonomous Research Agent</h3>
+        <p class="text-xs text-slate-300 leading-relaxed">Autonomous research system — enter any topic and the agent decomposes it into targeted queries, scrapes live web data across 3 search tiers, and synthesizes a cited Markdown report via LLM reasoning, with real-time progress tracking.</p>
+        <div class="flex flex-wrap gap-1.5 pt-1">
+          <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-surface text-slate-300 border border-borderSubtle">Node.js</span>
+          <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-surface text-slate-300 border border-borderSubtle">Express</span>
+          <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-surface text-slate-300 border border-borderSubtle">Groq AI</span>
+          <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-surface text-slate-300 border border-borderSubtle">Web Scraping</span>
+        </div>
+        <details class="group/details pt-1">
+          <summary class="cursor-pointer text-[11px] font-mono text-amberLight/80 hover:text-amberLight list-none flex items-center justify-between py-1"><span>[+] View System Spec</span><span class="text-xs group-open/details:rotate-90 transition-transform">›</span></summary>
+          <div class="mt-2 p-2.5 rounded bg-surface/60 border border-borderSubtle font-mono text-[10px] text-slate-300 space-y-1">
+            <div class="flex justify-between"><span>Search Tiers:</span><span class="text-amberLight font-semibold">DuckDuckGo → Bing → Wikipedia</span></div>
+            <div class="flex justify-between"><span>AI Reasoning:</span><span class="text-amberLight font-semibold">Groq LLM</span></div>
+            <div class="flex justify-between"><span>Output:</span><span class="text-amberLight font-semibold">Cited Markdown report + export</span></div>
+          </div>
+        </details>
+        <div class="pt-2 border-t border-borderSubtle/60 flex items-center gap-4">
+          <a class="text-xs font-mono font-medium text-amberAccent flex items-center gap-1 hover:text-amberLight transition-all" href="https://autonomous-research-agent-ioye.onrender.com" target="_blank" rel="noopener">Live Demo <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg></a>
+          <a class="text-xs font-mono font-medium text-slate-400 hover:text-white flex items-center gap-1 transition-all" href="https://github.com/sonu0421/autonomous-research-agent" target="_blank" rel="noopener">GitHub <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg></a>
+        </div>
+      </div>
+      </div>
+    </article>
+
+    <!-- Project 2: JobFinder Automation Pipeline -->
+    <article data-deploy="https://jobfinder-automation.onrender.com" data-name="JobFinder Automation Pipeline" class="tilt-card group rounded-xl bg-cardBg border border-borderWarm/70 overflow-hidden hover:border-amberAccent/60 hover:shadow-amber-subtle">
+      <div class="tilt-inner">
+      <div class="px-4 py-3 bg-surface border-b border-borderSubtle flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <span class="text-xs font-mono font-bold text-amberAccent">02</span>
+          <span class="text-[11px] font-mono text-amberLight uppercase tracking-wider">Pipeline Tool</span>
+        </div>
+        <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-surfaceAlt text-amberLight border border-borderWarm flex items-center gap-1">
+          <span class="w-1 h-1 rounded-full bg-amberLight animate-pulse"></span> Cron-Job
+        </span>
+      </div>
+      <!-- Real screenshot: JobFinder dashboard -->
+      <div class="relative w-full h-44 overflow-hidden bg-obsidian border-b border-borderSubtle group/img">
+        <img src="images/jobfinder.png" alt="JobFinder Smart Job Alerts Dashboard screenshot" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"/>
+        <div class="absolute bottom-2 left-3 px-2 py-0.5 rounded bg-obsidian/85 backdrop-blur-md border border-borderWarm text-[10px] font-mono text-amberLight flex items-center gap-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Live Dashboard
+        </div>
+      </div>
+      <div class="p-4 space-y-3">
+        <h3 class="text-base font-bold text-white tracking-tight group-hover:text-amberLight transition-colors">JobFinder Automation Pipeline</h3>
+        <p class="text-xs text-slate-300 leading-relaxed">Automated crawler that aggregates developer postings from 5 platforms, deduplicates listings, filters via criteria through Node.js webhooks, and delivers instant Telegram alerts.</p>
+        <div class="flex flex-wrap gap-1.5 pt-1">
+          <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-surface text-slate-300 border border-borderSubtle">Node.js</span>
+          <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-surface text-slate-300 border border-borderSubtle">Puppeteer</span>
+          <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-surface text-slate-300 border border-borderSubtle">Webhooks</span>
+          <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-surface text-slate-300 border border-borderSubtle">Telegram API</span>
+        </div>
+        <details class="group/details pt-1">
+          <summary class="cursor-pointer text-[11px] font-mono text-amberLight/80 hover:text-amberLight list-none flex items-center justify-between py-1"><span>[+] View Crawler Logs & Metrics</span><span class="text-xs group-open/details:rotate-90 transition-transform">›</span></summary>
+          <div class="mt-2 p-2.5 rounded bg-surface/60 border border-borderSubtle font-mono text-[10px] text-slate-300 space-y-1">
+            <div class="flex justify-between"><span>Daily Jobs Scraped:</span><span class="text-amberLight font-semibold">14,592 postings</span></div>
+            <div class="flex justify-between"><span>Avg Webhook Latency:</span><span class="text-amberLight font-semibold">415ms</span></div>
+            <div class="flex justify-between"><span>Deduplication Yield:</span><span class="text-amberLight font-semibold">99.1% clean</span></div>
+          </div>
+        </details>
+        <div class="pt-2 border-t border-borderSubtle/60 flex items-center gap-4">
+          <a class="text-xs font-mono font-medium text-amberAccent flex items-center gap-1 hover:text-amberLight transition-all" href="https://jobfinder-automation.onrender.com" target="_blank" rel="noopener">Live Demo <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg></a>
+          <a class="text-xs font-mono font-medium text-slate-400 hover:text-white flex items-center gap-1 transition-all" href="https://github.com/sonu0421/JobFinder-Automation" target="_blank" rel="noopener">GitHub <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg></a>
+        </div>
+      </div>
+      </div>
+    </article>
+
+    <!-- Project 3: Gupshup Realtime Chat -->
+    <article data-deploy="https://gupshuplive.vercel.app" data-name="Gupshup Realtime Chat" class="tilt-card group rounded-xl bg-cardBg border border-borderWarm/70 overflow-hidden hover:border-amberAccent/60 hover:shadow-amber-subtle">
+      <div class="tilt-inner">
+      <div class="px-4 py-3 bg-surface border-b border-borderSubtle flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <span class="text-xs font-mono font-bold text-amberAccent">03</span>
+          <span class="text-[11px] font-mono text-slate-300 uppercase tracking-wider">Full Stack</span>
+        </div>
+        <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-obsidian text-slate-400 border border-borderSubtle flex items-center gap-1">
+          <span class="w-1 h-1 rounded-full bg-amberAccent"></span> Real-Time
+        </span>
+      </div>
+      <!-- Real screenshot: Gupshup login -->
+      <div class="relative w-full h-44 overflow-hidden bg-obsidian border-b border-borderSubtle group/img">
+        <img src="images/gupshup.png" alt="Gupshup realtime chat app screenshot" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"/>
+        <div class="absolute bottom-2 left-3 px-2 py-0.5 rounded bg-obsidian/85 backdrop-blur-md border border-borderWarm text-[10px] font-mono text-amberLight flex items-center gap-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Live App
+        </div>
+      </div>
+      <div class="p-4 space-y-3">
+        <h3 class="text-base font-bold text-white tracking-tight group-hover:text-amberLight transition-colors">Gupshup Realtime Chat</h3>
+        <p class="text-xs text-slate-300 leading-relaxed">Low-latency instant messaging application with live presence, typing indicators, end-to-end socket events, and database sync.</p>
+        <div class="flex flex-wrap gap-1.5 pt-1">
+          <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-surface text-slate-300 border border-borderSubtle">React</span>
+          <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-surface text-slate-300 border border-borderSubtle">WebSockets</span>
+          <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-surface text-slate-300 border border-borderSubtle">Tailwind CSS</span>
+        </div>
+        <details class="group/details pt-1">
+          <summary class="cursor-pointer text-[11px] font-mono text-amberLight/80 hover:text-amberLight list-none flex items-center justify-between py-1"><span>[+] View Socket Protocol Details</span><span class="text-xs group-open/details:rotate-90 transition-transform">›</span></summary>
+          <div class="mt-2 p-2.5 rounded bg-surface/60 border border-borderSubtle font-mono text-[10px] text-slate-300 space-y-1">
+            <div class="flex justify-between"><span>Protocol:</span><span class="text-amberLight font-semibold">WSS Binary Streams</span></div>
+            <div class="flex justify-between"><span>End-to-End Latency:</span><span class="text-amberLight font-semibold">&lt; 40ms</span></div>
+            <div class="flex justify-between"><span>Presence Ping:</span><span class="text-amberLight font-semibold">15s Keep-Alive</span></div>
+          </div>
+        </details>
+        <div class="pt-2 border-t border-borderSubtle/60 flex items-center gap-4">
+          <a class="text-xs font-mono font-medium text-amberAccent flex items-center gap-1 hover:text-amberLight transition-all" href="https://gupshuplive.vercel.app" target="_blank" rel="noopener">Live Demo <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg></a>
+          <a class="text-xs font-mono font-medium text-slate-400 hover:text-white flex items-center gap-1 transition-all" href="https://github.com/sonu0421/mern-gupshup-realtime-chat" target="_blank" rel="noopener">GitHub <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg></a>
+        </div>
+      </div>
+      </div>
+    </article>
+  </div>
+</section>
+<!-- END: ProjectsSection -->
+
+<!-- BEGIN: ExperienceSection -->
+<section class="space-y-5 reveal-on-scroll" data-purpose="experience" id="experience">
+  <div class="flex items-baseline justify-between border-b border-borderWarm/60 pb-2">
+    <div class="flex items-center gap-2">
+      <span class="font-mono text-xs text-amberAccent font-bold">03.</span>
+      <h2 class="text-lg font-bold uppercase tracking-wider text-white">Experience</h2>
+    </div>
+    <span class="text-xs font-mono text-amberLight/70">4 Roles</span>
+  </div>
+  <div class="exp-timeline relative pl-5">
+    <div class="absolute left-[5px] top-2 bottom-2 w-px bg-gradient-to-b from-amberAccent/70 via-amberAccent/30 to-transparent"></div>
+    <div class="exp-rail-fill" data-rail="m"></div>
+    <div class="exp-comet" data-rail="m"></div>
+    <div class="relative space-y-5">
+      <article class="relative">
+        <span class="exp-dot absolute -left-5 top-1.5 w-[11px] h-[11px] rounded-full bg-amberAccent shadow-[0_0_10px_rgba(245,158,11,0.9)] ring-4 ring-obsidian"></span>
+        <div class="rounded-xl bg-cardBg border border-borderWarm/70 p-4 space-y-2 hover:border-amberAccent/50 transition-colors">
+          <span class="inline-block text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amberAccent text-black">Feb 2026 — Jul 2026</span>
+          <h3 class="text-sm font-bold text-white">Web Developer & AI Video Creator</h3>
+          <p class="text-[11px] font-mono text-amberLight/80">Swastik Tech Pvt. Ltd.</p>
+          <ul class="text-[11px] text-slate-300 space-y-1 leading-relaxed">
+            <li class="flex gap-1.5"><span class="text-amberAccent shrink-0">•</span><span>Created and maintained company websites end-to-end in a multitasking role.</span></li>
+            <li class="flex gap-1.5"><span class="text-amberAccent shrink-0">•</span><span>Found and reported bugs across web properties to keep releases stable.</span></li>
+            <li class="flex gap-1.5"><span class="text-amberAccent shrink-0">•</span><span>Generated AI videos for the company's digital content needs.</span></li>
+          </ul>
+          <div class="flex flex-wrap gap-1.5 pt-0.5">
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-surface text-slate-300 border border-borderSubtle">Web Development</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-surface text-slate-300 border border-borderSubtle">Bug Testing</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-surface text-slate-300 border border-borderSubtle">AI Video</span>
+          </div>
+        </div>
+      </article>
+      <article class="relative">
+        <span class="exp-dot absolute -left-5 top-1.5 w-[11px] h-[11px] rounded-full bg-amberAccent shadow-[0_0_10px_rgba(245,158,11,0.9)] ring-4 ring-obsidian"></span>
+        <div class="rounded-xl bg-cardBg border border-borderWarm/70 p-4 space-y-2 hover:border-amberAccent/50 transition-colors">
+          <span class="inline-block text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amberAccent text-black">Jul 2025 — Dec 2025</span>
+          <h3 class="text-sm font-bold text-white">Frontend & AI Developer Intern</h3>
+          <p class="text-[11px] font-mono text-amberLight/80">Galipea Molecules Pvt. Ltd.</p>
+          <ul class="text-[11px] text-slate-300 space-y-1 leading-relaxed">
+            <li class="flex gap-1.5"><span class="text-amberAccent shrink-0">•</span><span>Built an AI-powered appointment booking chatbot automating client scheduling & responses.</span></li>
+            <li class="flex gap-1.5"><span class="text-amberAccent shrink-0">•</span><span>Developed frontend dashboards for appointments, analytics & chatbot responses.</span></li>
+            <li class="flex gap-1.5"><span class="text-amberAccent shrink-0">•</span><span>Integrated n8n workflows with APIs & databases, collaborating with the backend team.</span></li>
+          </ul>
+          <div class="flex flex-wrap gap-1.5 pt-0.5">
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-surface text-slate-300 border border-borderSubtle">React</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-surface text-slate-300 border border-borderSubtle">n8n</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-surface text-slate-300 border border-borderSubtle">Node.js</span>
+          </div>
+        </div>
+      </article>
+      <article class="relative">
+        <span class="exp-dot absolute -left-5 top-1.5 w-[11px] h-[11px] rounded-full bg-amberAccent shadow-[0_0_10px_rgba(245,158,11,0.9)] ring-4 ring-obsidian"></span>
+        <div class="rounded-xl bg-cardBg border border-borderWarm/70 p-4 space-y-2 hover:border-amberAccent/50 transition-colors">
+          <span class="inline-block text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amberAccent text-black">Oct 2024 — Nov 2024</span>
+          <h3 class="text-sm font-bold text-white">Web Developer Intern</h3>
+          <p class="text-[11px] font-mono text-amberLight/80">CodeClause</p>
+          <ul class="text-[11px] text-slate-300 space-y-1 leading-relaxed">
+            <li class="flex gap-1.5"><span class="text-amberAccent shrink-0">•</span><span>Built web applications with HTML, CSS & JavaScript; backend with Node.js, REST APIs & MongoDB.</span></li>
+            <li class="flex gap-1.5"><span class="text-amberAccent shrink-0">•</span><span>Improved UI design, backend logic & integration of full-stack components.</span></li>
+          </ul>
+          <div class="flex flex-wrap gap-1.5 pt-0.5">
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-surface text-slate-300 border border-borderSubtle">JavaScript</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-surface text-slate-300 border border-borderSubtle">Node.js</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-surface text-slate-300 border border-borderSubtle">MongoDB</span>
+          </div>
+        </div>
+      </article>
+      <article class="relative">
+        <span class="exp-dot absolute -left-5 top-1.5 w-[11px] h-[11px] rounded-full bg-amberAccent shadow-[0_0_10px_rgba(245,158,11,0.9)] ring-4 ring-obsidian"></span>
+        <div class="rounded-xl bg-cardBg border border-borderWarm/70 p-4 space-y-2 hover:border-amberAccent/50 transition-colors">
+          <span class="inline-block text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amberAccent text-black">May 2024 — Jul 2024</span>
+          <h3 class="text-sm font-bold text-white">GSSoC Contributor — Apprenticeship</h3>
+          <p class="text-[11px] font-mono text-amberLight/80">GirlScript Summer of Code</p>
+          <ul class="text-[11px] text-slate-300 space-y-1 leading-relaxed">
+            <li class="flex gap-1.5"><span class="text-amberAccent shrink-0">•</span><span>Contributed to open-source projects as part of the GirlScript Summer of Code apprenticeship.</span></li>
+            <li class="flex gap-1.5"><span class="text-amberAccent shrink-0">•</span><span>Developed features and bug fixes in collaboration with project maintainers.</span></li>
+            <li class="flex gap-1.5"><span class="text-amberAccent shrink-0">•</span><span>Gained hands-on experience in software development & project management.</span></li>
+          </ul>
+          <div class="flex flex-wrap gap-1.5 pt-0.5">
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-surface text-slate-300 border border-borderSubtle">Open Source</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-surface text-slate-300 border border-borderSubtle">Git & GitHub</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-surface text-slate-300 border border-borderSubtle">Collaboration</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+<!-- END: ExperienceSection -->
+
+<!-- BEGIN: ArchitectureDiagramSection -->
+<section class="space-y-4 reveal-on-scroll" data-purpose="how-i-build">
+  <div class="flex items-baseline justify-between border-b border-borderWarm/60 pb-2">
+    <div class="flex items-center gap-2">
+      <span class="font-mono text-xs text-amberAccent font-bold">04.</span>
+      <h2 class="text-lg font-bold uppercase tracking-wider text-white">How I Build</h2>
+    </div>
+    <p class="text-xs font-mono text-slate-400 hidden sm:block">System Architecture & Pipeline Flow</p>
+  </div>
+  <div class="rounded-xl bg-cardBg border border-borderWarm/70 p-4 relative overflow-hidden" id="pipelineFlowContainer">
+    <div class="absolute left-[30px] top-6 bottom-6 w-0.5 pipeline-wire opacity-70 pointer-events-none"></div>
+    <div class="space-y-1 relative z-10">
+      <div class="pipeline-step flex items-center gap-3 py-2.5 px-2 rounded-lg transition-colors hover:bg-surface/60 cursor-pointer" onclick="activateStep(this, 'Stage 01: Client request payload dispatched')">
+        <div class="w-7 h-7 rounded-md bg-surface border border-borderWarm/80 flex items-center justify-center font-mono text-xs text-amberLight font-semibold flex-shrink-0 z-10">01</div>
+        <div class="flex-1"><div class="text-xs font-bold text-white">User Interaction</div><div class="text-[11px] text-slate-400 font-mono">Mobile App / Web Client Input</div></div>
+        <div class="text-xs font-mono text-amberAccent">⟶</div>
+      </div>
+      <div class="h-px bg-borderSubtle ml-10"></div>
+      <div class="pipeline-step flex items-center gap-3 py-2.5 px-2 rounded-lg transition-colors hover:bg-surface/60 cursor-pointer" onclick="activateStep(this, 'Stage 02: React hydration & telemetry dispatch')">
+        <div class="w-7 h-7 rounded-md bg-surface border border-borderWarm/80 flex items-center justify-center font-mono text-xs text-amberLight font-semibold flex-shrink-0 z-10">02</div>
+        <div class="flex-1"><div class="text-xs font-bold text-white">Frontend Engine</div><div class="text-[11px] text-slate-400 font-mono">React / Next.js / Tailwind Interface</div></div>
+        <div class="text-xs font-mono text-amberAccent">⟶</div>
+      </div>
+      <div class="h-px bg-borderSubtle ml-10"></div>
+      <div class="pipeline-step flex items-center gap-3 py-2.5 px-2 rounded-lg transition-colors hover:bg-surface/60 cursor-pointer" onclick="activateStep(this, 'Stage 03: Node.js webhook security gateway verified')">
+        <div class="w-7 h-7 rounded-md bg-surface border border-borderWarm/80 flex items-center justify-center font-mono text-xs text-amberLight font-semibold flex-shrink-0 z-10">03</div>
+        <div class="flex-1"><div class="text-xs font-bold text-white">API & Webhooks</div><div class="text-[11px] text-slate-400 font-mono">Node.js Endpoints / Event Handlers</div></div>
+        <div class="text-xs font-mono text-amberAccent">⟶</div>
+      </div>
+      <div class="h-px bg-borderSubtle ml-10"></div>
+      <div class="pipeline-step flex items-center gap-3 py-2.5 bg-surface/50 rounded-lg px-2 border border-amberAccent/30 shadow-amber-subtle cursor-pointer" onclick="activateStep(this, 'Stage 04: LLM tool invocation & n8n workflow executed')">
+        <div class="w-7 h-7 rounded-md bg-amberAccent/15 border border-amberAccent/50 flex items-center justify-center font-mono text-xs text-amberLight font-bold flex-shrink-0 z-10">04</div>
+        <div class="flex-1">
+          <div class="text-xs font-bold text-amberLight flex items-center gap-1.5"><span>AI & Automation Layer</span><span class="w-1.5 h-1.5 rounded-full bg-amberAccent animate-ping"></span></div>
+          <div class="text-[11px] text-slate-300 font-mono">n8n Orchestrator + OpenAI Function Calling</div>
+        </div>
+        <div class="text-xs font-mono text-amberAccent">⟶</div>
+      </div>
+      <div class="h-px bg-borderSubtle ml-10"></div>
+      <div class="pipeline-step flex items-center gap-3 py-2.5 px-2 rounded-lg transition-colors hover:bg-surface/60 cursor-pointer" onclick="activateStep(this, 'Stage 05: Supabase transaction committed & alert dispatched')">
+        <div class="w-7 h-7 rounded-md bg-surface border border-borderWarm/80 flex items-center justify-center font-mono text-xs text-amberLight font-semibold flex-shrink-0 z-10">05</div>
+        <div class="flex-1"><div class="text-xs font-bold text-white">Data & Notification</div><div class="text-[11px] text-slate-400 font-mono">Supabase SQL + Email/SMS Alert Dispatched</div></div>
+        <div class="text-xs font-mono text-amberAccent font-bold">✓</div>
+      </div>
+    </div>
+    <div class="mt-3 pt-2.5 border-t border-borderSubtle/60 flex items-center justify-between text-[10px] font-mono text-slate-400">
+      <span id="pipelineStatusText">Flow: User → API → n8n → DB</span>
+      <span class="text-amberLight flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-amberAccent animate-pulse"></span> 99.98% uptime</span>
+    </div>
+  </div>
+</section>
+<!-- END: ArchitectureDiagramSection -->
+
+<!-- BEGIN: TechStackSection -->
+<section class="space-y-4 reveal-on-scroll" data-purpose="tech-stack">
+  <div class="flex items-baseline justify-between border-b border-borderWarm/60 pb-2">
+    <div class="flex items-center gap-2">
+      <span class="font-mono text-xs text-amberAccent font-bold">05.</span>
+      <h2 class="text-lg font-bold uppercase tracking-wider text-white">Tech Stack</h2>
+    </div>
+    <span class="text-[10px] font-mono text-slate-500 uppercase tracking-widest">Directory</span>
+  </div>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+    <div class="tilt-card p-3.5 rounded-xl bg-cardBg border border-borderWarm/70 space-y-2 hover:border-amberAccent/50">
+      <div class="tilt-inner flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-amberLight"></span><h3 class="text-xs font-mono uppercase font-bold text-slate-200">Frontend</h3></div>
+      <ul class="tilt-inner text-xs text-slate-400 font-mono space-y-1">
+        <li class="hover:text-amberLight transition-colors cursor-default">• React.js</li>
+        <li class="hover:text-amberLight transition-colors cursor-default">• Next.js</li>
+        <li class="hover:text-amberLight transition-colors cursor-default">• JavaScript (ES6+)</li>
+        <li class="hover:text-amberLight transition-colors cursor-default">• Tailwind CSS</li>
+      </ul>
+    </div>
+    <div class="tilt-card p-3.5 rounded-xl bg-cardBg border border-borderWarm/70 space-y-2 hover:border-amberAccent/50">
+      <div class="tilt-inner flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-amberAccent"></span><h3 class="text-xs font-mono uppercase font-bold text-slate-200">Backend</h3></div>
+      <ul class="tilt-inner text-xs text-slate-400 font-mono space-y-1">
+        <li class="hover:text-amberLight transition-colors cursor-default">• Node.js</li>
+        <li class="hover:text-amberLight transition-colors cursor-default">• Express.js</li>
+        <li class="hover:text-amberLight transition-colors cursor-default">• REST APIs</li>
+        <li class="hover:text-amberLight transition-colors cursor-default">• WebSockets</li>
+      </ul>
+    </div>
+    <div class="tilt-card p-3.5 rounded-xl bg-cardBg border border-borderWarm/70 space-y-2 hover:border-amberAccent/50">
+      <div class="tilt-inner flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-amberAccent"></span><h3 class="text-xs font-mono uppercase font-bold text-slate-200">AI / Automation</h3></div>
+      <ul class="tilt-inner text-xs text-slate-400 font-mono space-y-1">
+        <li class="hover:text-amberLight transition-colors cursor-default">• n8n Workflows</li>
+        <li class="hover:text-amberLight transition-colors cursor-default">• OpenAI APIs</li>
+        <li class="hover:text-amberLight transition-colors cursor-default">• Prompt Chains</li>
+        <li class="hover:text-amberLight transition-colors cursor-default">• Puppeteer Scrapers</li>
+      </ul>
+    </div>
+    <div class="tilt-card p-3.5 rounded-xl bg-cardBg border border-borderWarm/70 space-y-2 hover:border-amberAccent/50">
+      <div class="tilt-inner flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-amberLight"></span><h3 class="text-xs font-mono uppercase font-bold text-slate-200">Database & DevOps</h3></div>
+      <ul class="tilt-inner text-xs text-slate-400 font-mono space-y-1">
+        <li class="hover:text-amberLight transition-colors cursor-default">• Supabase</li>
+        <li class="hover:text-amberLight transition-colors cursor-default">• PostgreSQL / MySQL</li>
+        <li class="hover:text-amberLight transition-colors cursor-default">• Git & GitHub</li>
+        <li class="hover:text-amberLight transition-colors cursor-default">• Docker Basics</li>
+      </ul>
+    </div>
+  </div>
+</section>
+<!-- END: TechStackSection -->
+
+<!-- BEGIN: EducationSection -->
+<section class="space-y-4 reveal-on-scroll" data-purpose="education">
+  <div class="flex items-baseline justify-between border-b border-borderWarm/60 pb-2">
+    <div class="flex items-center gap-2">
+      <span class="font-mono text-xs text-amberAccent font-bold">06.</span>
+      <h2 class="text-lg font-bold uppercase tracking-wide text-white">Education</h2>
+    </div>
+    <span class="text-[10px] font-mono text-slate-500 uppercase tracking-widest">Credentials</span>
+  </div>
+  <div class="p-4 rounded-xl bg-cardBg border border-borderWarm/70 flex items-start gap-3.5 hover:border-amberAccent/50 transition-colors">
+    <div class="p-2.5 rounded-lg bg-surface text-amberLight border border-borderWarm flex-shrink-0">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+    </div>
+    <div class="space-y-1">
+      <span class="text-xs font-mono text-amberAccent font-semibold">2021 — 2025</span>
+      <h3 class="text-sm font-bold text-white">B.Tech in Computer Science & Engineering</h3>
+      <p class="text-xs text-slate-400 leading-relaxed mt-1">Focus on Distributed Computing, Full Stack Web Architecture, and Practical Automation Systems.</p>
+    </div>
+  </div>
+</section>
+<!-- END: EducationSection -->
+
+<!-- BEGIN: ContactCTASection -->
+<section class="space-y-5 reveal-on-scroll" data-purpose="contact" id="contact">
+  <div class="rounded-2xl bg-cardBg border border-borderWarm p-6 md:p-10 text-center space-y-4 shadow-amber-subtle hover:border-amberAccent/60 transition-colors">
+    <span class="text-xs font-mono uppercase tracking-widest text-amberAccent font-medium block">Let's Connect</span>
+    <h2 class="text-2xl md:text-4xl font-extrabold text-white uppercase tracking-tight">Let's Build Something Useful</h2>
+    <p class="text-xs md:text-sm text-slate-300 max-w-md mx-auto leading-relaxed">Currently open to high-impact web engineering roles and freelance AI automation pipelines.</p>
+    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5">
+    <a class="btn-shimmer inline-flex items-center justify-center gap-2 w-full sm:w-auto sm:px-10 py-3.5 px-4 rounded-xl bg-amberAccent text-black font-bold text-sm tracking-wide shadow-amber-subtle hover:bg-amberLight hover:shadow-amber-glow transition-all active:scale-95" href="mailto:sonu.kmr102002@gmail.com">
+      <span>Send An Email</span>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+    </a>
+    <a class="inline-flex items-center justify-center gap-2 w-full sm:w-auto sm:px-10 py-3.5 px-4 rounded-xl bg-[#25D366] text-black font-bold text-sm tracking-wide shadow-amber-subtle hover:brightness-110 transition-all active:scale-95" href="https://wa.me/917678114905?text=Hi%20Sonu!%20I%20saw%20your%20portfolio%20and%20wanted%20to%20connect." target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+      <span>WhatsApp Me</span>
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+    </div>
+    <form class="contact-form max-w-md mx-auto w-full flex flex-col gap-2.5 pt-1 text-left">
+      <span class="text-xs font-mono uppercase tracking-widest text-amberAccent font-medium block text-center">Or drop a message</span>
+      <input type="text" name="name" required maxlength="80" placeholder="Your name" aria-label="Your name" class="w-full bg-surface border border-borderWarm/70 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-amberAccent/60 transition-colors">
+      <input type="email" name="email" required maxlength="120" placeholder="Your email" aria-label="Your email" class="w-full bg-surface border border-borderWarm/70 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-amberAccent/60 transition-colors">
+      <textarea name="message" required maxlength="2000" rows="4" placeholder="What do you want to build?" aria-label="Your message" class="w-full bg-surface border border-borderWarm/70 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-amberAccent/60 transition-colors resize-none"></textarea>
+      <input type="text" name="_honey" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button type="submit" class="inline-flex items-center justify-center gap-2 w-full py-3.5 px-4 rounded-xl bg-amberAccent text-black font-bold text-sm tracking-wide shadow-amber-subtle hover:bg-amberLight transition-all active:scale-95 disabled:opacity-60 disabled:pointer-events-none">
+        <span>Send Message</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+      </button>
+      <p class="form-status text-xs font-mono min-h-[18px] text-slate-500 text-center"></p>
+    </form>
+    <div class="grid grid-cols-2 gap-2.5 pt-2 text-left max-w-md mx-auto">
+      <div class="p-3 rounded-lg bg-surface border border-borderWarm/70 hover:border-amberAccent/50 transition-colors">
+        <span class="text-[10px] font-mono text-slate-500 uppercase block">GitHub</span>
+        <a class="text-xs font-mono text-goldChampagne hover:text-amberLight truncate block mt-0.5 transition-colors" href="https://github.com/sonu0421" target="_blank" rel="noopener">@sonu0421</a>
+      </div>
+      <div class="p-3 rounded-lg bg-surface border border-borderWarm/70 hover:border-amberAccent/50 transition-colors">
+        <span class="text-[10px] font-mono text-slate-500 uppercase block">LinkedIn</span>
+        <a class="text-xs font-mono text-goldChampagne hover:text-amberLight truncate block mt-0.5 transition-colors" href="https://www.linkedin.com/in/sonu-kumar-15b055283/" target="_blank" rel="noopener">/in/sonu-kumar-15b055283</a>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- END: ContactCTASection -->
+</div><!-- /mobile inner -->
+</div><!-- /mobile lg:hidden -->
+<!-- BEGIN: DesktopExperience -->
+<div class="hidden lg:block">
+<!-- DESKTOP-HERO -->
+<div class="fixed inset-0 bg-grid-pattern pointer-events-none z-0 opacity-70"></div>
+<div class="w-full pt-16 bg-transparent relative max-w-7xl mx-auto px-8 z-10">
+<div class="flex flex-col w-full text-on-surface">
+
+<!-- TOP HERO GRID -->
+<section class="relative pt-6 pb-20 overflow-hidden">
+<div class="absolute -top-24 left-1/4 w-96 h-96 rounded-full bg-amber-500/15 blur-[120px] pointer-events-none animate-pulse" style="animation-duration: 8s;"></div>
+<div class="absolute top-1/3 -right-20 w-80 h-80 rounded-full bg-amber-600/10 blur-[100px] pointer-events-none"></div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<!-- Left: Hero Typography -->
+<div class="lg:col-span-7 flex flex-col items-start gap-6">
+<div class="flex items-center gap-3 flex-wrap">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high border border-amber-500/30 text-xs font-mono tracking-wide text-amber-300 shadow-sm shadow-amber-500/10">
+<span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-amber-400"></span></span>
+<span>• Hello, I'm Sonu Kumar</span>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-surface-container text-xs font-mono text-amber-400/90 border border-amber-500/25">CSE '25</span>
+</div>
+<h1 id="tw-headline-d" class="tw-headline text-4xl sm:text-5xl xl:text-6xl font-headline font-extrabold tracking-tight leading-[1.08] text-white"></h1>
+<p class="text-lg text-on-surface-variant max-w-xl font-normal leading-relaxed">
+<span class="text-white font-medium">Frontend Developer</span> / <span class="text-white font-medium">AI Agent Developer</span> / <span class="text-white font-medium">Full-Stack Developer</span>
+</p>
+<p class="text-sm text-secondary font-mono leading-relaxed max-w-lg -mt-2">
+Bridging deterministic frontend interfaces with self-orchestrating event streams, LLM reasoning layers, and automated background workers.
+</p>
+<div class="flex flex-wrap items-center gap-4 pt-2">
+<a class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-amber-400 hover:bg-amber-300 active:scale-95 text-slate-950 font-semibold text-sm tracking-wide transition-all duration-300 shadow-lg shadow-amber-400/20 hover:shadow-amber-400/40 hover:-translate-y-0.5 group" href="#d-projects">
+<span>View Work</span><span class="text-base font-bold group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform">↘</span>
+</a>
+<a class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-surface-container-high hover:bg-surface-variant active:scale-95 text-on-surface text-sm font-medium border border-white/10 hover:border-amber-400/50 transition-all duration-300 hover:-translate-y-0.5 group shadow-sm" href="Sonu_Kumar_Resume.pdf" download>
+<span>Resume</span><span class="text-amber-400 text-base group-hover:translate-y-0.5 transition-transform">⤓</span>
+</a>
+<div class="ml-2 flex items-center gap-2 text-xs font-mono text-on-surface-variant py-2">
+<span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span></span>
+<span>Available for Full-time Roles</span>
+</div>
+</div>
+</div>
+<!-- Right: 3D Ecosystem + Profile Card -->
+<div class="lg:col-span-5 flex flex-col gap-6">
+<div class="relative w-full rounded-2xl bg-surface-container/90 border border-amber-500/25 p-6 overflow-hidden shadow-2xl backdrop-blur-xl group hover:border-amber-400/50 transition-all duration-500">
+<div class="flex items-center justify-between pb-4 border-b border-white/5">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse shadow-[0_0_6px_rgba(245,158,11,0.8)]"></span>
+<span class="text-xs font-mono uppercase tracking-wider text-amber-300">CORE ECOSYSTEM ARCHITECTURE</span>
+</div>
+<span class="text-[11px] font-mono text-amber-400/90 flex items-center gap-1.5 px-2 py-0.5 rounded bg-amber-400/10 border border-amber-400/20">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> ACTIVE STREAM
+</span>
+</div>
+<div class="relative h-72 flex items-center justify-center my-2 select-none" id="orbit-container-d">
+<canvas id="orbitCanvasD" style="position:absolute;inset:0;width:100%;height:100%;display:block;"></canvas>
+<div id="orbitLabelsD" style="position:absolute;inset:0;pointer-events:none;z-index:20;"></div>
+<div id="core-engine-d" class="animate-desktop-core relative z-10 flex flex-col items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-amber-300 via-amber-400 to-amber-600 text-slate-950 font-bold text-center p-2 cursor-pointer transition-transform duration-300 hover:scale-110 shadow-xl shadow-amber-500/40" title="Sonu Kumar" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);">
+<span class="tw-ring" aria-hidden="true"></span><span class="tw-ring r2" aria-hidden="true"></span>
+<span class="text-[22px] font-extrabold tracking-tight leading-none">SONU</span>
+<span class="text-[8px] font-mono font-semibold opacity-85 tracking-[0.2em]">DEVELOPER</span>
+</div>
+<button class="satellite-node absolute px-3 py-1 rounded-md bg-surface-variant/90 border border-amber-400/30 text-xs font-mono text-amber-200 shadow-lg backdrop-blur-md hover:scale-110 hover:border-amber-400 hover:bg-amber-950/60 hover:text-amber-100 hover:shadow-amber-400/30 transition-all duration-200 z-20 cursor-pointer" aria-label="React architecture node" data-latency="42ms" data-route="Client State Engine (React 19 + SSR)" type="button">⚛ React</button>
+<button class="satellite-node absolute px-3 py-1 rounded-md bg-surface-variant/90 border border-white/10 text-xs font-mono text-on-surface shadow-lg backdrop-blur-md hover:scale-110 hover:border-amber-400 hover:text-amber-300 hover:shadow-amber-400/25 transition-all duration-200 z-20 cursor-pointer" aria-label="Node.js architecture node" data-latency="68ms" data-route="Microservice API Gateway (Node.js)" type="button">Node.js</button>
+<button class="satellite-node absolute px-3 py-1 rounded-md bg-surface-variant/90 border border-amber-400/40 text-xs font-mono text-amber-300 shadow-lg backdrop-blur-md hover:scale-110 hover:border-amber-300 hover:bg-amber-950/70 hover:shadow-amber-400/40 transition-all duration-200 z-20 cursor-pointer" aria-label="n8n Flow architecture node" data-latency="110ms" data-route="Autonomous Execution Pipelines (n8n Engine)" type="button">⚡ n8n Flow</button>
+<button class="satellite-node absolute px-3 py-1 rounded-md bg-surface-variant/90 border border-white/10 text-xs font-mono text-on-surface shadow-lg backdrop-blur-md hover:scale-110 hover:border-amber-400 hover:text-amber-300 hover:shadow-amber-400/25 transition-all duration-200 z-20 cursor-pointer" aria-label="Supabase database architecture node" data-latency="54ms" data-route="PostgreSQL Edge Sync (Supabase)" type="button">Supabase / DB</button>
+<button class="satellite-node absolute px-3 py-1 rounded-md bg-surface-variant/90 border border-white/10 text-xs font-mono text-on-surface shadow-lg backdrop-blur-md hover:scale-110 hover:border-amber-400 hover:text-amber-300 hover:shadow-amber-400/25 transition-all duration-200 z-20 cursor-pointer" aria-label="TypeScript architecture node" data-latency="38ms" data-route="Type-Safe Client Contracts (TypeScript)" type="button">TypeScript</button>
+<button class="satellite-node absolute px-3 py-1 rounded-md bg-surface-variant/90 border border-white/10 text-xs font-mono text-on-surface shadow-lg backdrop-blur-md hover:scale-110 hover:border-amber-400 hover:text-amber-300 hover:shadow-amber-400/25 transition-all duration-200 z-20 cursor-pointer" aria-label="MongoDB architecture node" data-latency="61ms" data-route="Document Store Sync (MongoDB)" type="button">MongoDB</button>
+<button class="satellite-node absolute px-3 py-1 rounded-md bg-surface-variant/90 border border-white/10 text-xs font-mono text-on-surface shadow-lg backdrop-blur-md hover:scale-110 hover:border-amber-400 hover:text-amber-300 hover:shadow-amber-400/25 transition-all duration-200 z-20 cursor-pointer" aria-label="Python architecture node" data-latency="88ms" data-route="AI Scripting Runtime (Python)" type="button">Python</button>
+</div>
+<div class="flex items-center justify-between text-xs font-mono text-secondary pt-3 border-t border-white/5">
+<span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span><span>Latency: <strong class="text-zinc-200 font-mono" id="latency-val-d">&lt;140ms</strong></span></span>
+<span class="text-amber-400 text-right truncate max-w-[210px]" id="telemetry-route-d">Sync: Realtime Event Broker</span>
+</div>
+</div>
+<div class="rounded-xl bg-surface-container-high/90 border border-white/10 p-5 flex items-center gap-5 relative overflow-hidden group hover:border-amber-500/40 hover:-translate-y-1 transition-all duration-300 shadow-xl">
+<div class="w-16 h-16 rounded-xl bg-gradient-to-br from-amber-400/30 to-amber-600/10 shrink-0 overflow-hidden border border-amber-500/30 flex items-center justify-center text-2xl font-bold text-amber-300 font-headline">SK</div>
+<div class="flex flex-col gap-1 min-w-0">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded text-[10px] font-mono tracking-widest uppercase bg-amber-400/10 text-amber-300 border border-amber-400/25 font-semibold">B.TECH CSE GRADUATE</span>
+</div>
+<p class="text-xs text-zinc-300 italic">"Turning repetitive ideas into self-operating automated solutions."</p>
+<span class="text-[11px] font-mono text-amber-400/90 tracking-wide">— Sonu Kumar</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- DESKTOP-ABOUT -->
+<section class="py-16 border-t border-white/10 relative scroll-mt-16" id="d-about">
+<div class="flex items-center gap-3 mb-8">
+<span class="text-amber-400 font-mono text-sm tracking-wider font-semibold">01.</span>
+<h2 class="text-xs font-mono uppercase tracking-widest text-secondary font-semibold">WHO I AM & FOCUS</h2>
+<div class="h-px bg-white/10 flex-1 ml-4"></div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<div class="lg:col-span-5 flex flex-col gap-4">
+<h3 class="text-2xl sm:text-3xl font-headline font-bold text-white tracking-tight leading-snug">Architecting systems that operate without human friction.</h3>
+<p class="text-on-surface-variant text-sm sm:text-base leading-relaxed">I am a Computer Science graduate specializing in modern web engineering and autonomous AI agent workflows. Rather than static websites, I design systems that synchronize data across platforms, handle user intents, and perform complex automation without human friction.</p>
+<div class="p-4 rounded-lg bg-surface-container border border-amber-500/20 hover:border-amber-400/40 transition-colors flex items-start gap-3 mt-2 shadow-inner">
+<span class="material-symbols-outlined text-amber-400 shrink-0">terminal</span>
+<div class="text-xs text-zinc-300 font-mono space-y-1">
+<p><span class="text-amber-400">const</span> mindset = "Autonomy over repetition";</p>
+<p><span class="text-amber-400">focus</span>: [Full-Stack React, Agent Pipelines, Cloud Workers];</p>
+</div>
+</div>
+</div>
+<div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="rounded-xl bg-surface-container p-5 border border-white/10 hover:border-amber-400/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-300 group">
+<div class="flex items-center justify-between mb-3"><span class="text-base font-bold text-white group-hover:text-amber-200 transition-colors">⚡ Web Apps</span><span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">LIVE</span></div>
+<p class="text-xs text-on-surface-variant leading-relaxed">High-performance React & Next.js client experiences with clean responsive interfaces and dynamic state synchronization.</p>
+</div>
+<div class="rounded-xl bg-surface-container p-5 border border-amber-500/25 bg-gradient-to-br from-surface-container to-amber-950/20 hover:border-amber-400/50 hover:-translate-y-1 hover:shadow-xl hover:shadow-amber-500/15 transition-all duration-300 group">
+<div class="flex items-center justify-between mb-3"><span class="text-base font-bold text-amber-300 group-hover:text-amber-100 transition-colors">🤖 AI Automation</span><span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-400/15 text-amber-300 border border-amber-400/30">AUTO</span></div>
+<p class="text-xs text-zinc-300 leading-relaxed">Autonomous triggers, GPT triage & n8n pipeline orchestration that turn unstructured data into actions.</p>
+</div>
+<div class="rounded-xl bg-surface-container p-5 border border-white/10 hover:border-amber-400/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-300 group">
+<div class="flex items-center justify-between mb-3"><span class="text-base font-bold text-white group-hover:text-amber-200 transition-colors">⚙️ Workflow Eng</span><span class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-500/10 text-sky-300 border border-sky-500/20">SYNC</span></div>
+<p class="text-xs text-on-surface-variant leading-relaxed">Zero-error data flows, cron triggers & microservice synchronization across disparate cloud platforms.</p>
+</div>
+<div class="rounded-xl bg-surface-container p-5 border border-white/10 hover:border-amber-400/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-300 group">
+<div class="flex items-center justify-between mb-3"><span class="text-base font-bold text-white group-hover:text-amber-200 transition-colors">🔌 API Systems</span><span class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-500/10 text-purple-300 border border-purple-500/20">REST</span></div>
+<p class="text-xs text-on-surface-variant leading-relaxed">REST, Webhooks, Supabase real-time architectures, and low-latency database models with fine-grained access control.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- DESKTOP-PROJECTS -->
+<!-- DESKTOP-PROJECTS-RENAMED -->
+<section class="py-16 border-t border-white/10 relative scroll-mt-16" id="d-projects">
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="text-amber-400 font-mono text-sm tracking-wider font-semibold">02.</span>
+<h2 class="text-xs font-mono uppercase tracking-widest text-secondary font-semibold">SELECTED WORK</h2>
+</div>
+<h3 class="text-2xl sm:text-3xl font-headline font-bold text-white tracking-tight">Featured Production Deployments</h3>
+</div>
+<span class="text-xs font-mono text-amber-400/80 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>PROD METRICS / 2024–2025</span>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Project 01 (span 7) -->
+<div data-deploy="https://autonomous-research-agent-ioye.onrender.com" data-name="Autonomous Research Agent" class="tilt-card lg:col-span-7 rounded-2xl bg-surface-container border border-amber-500/25 p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden group hover:border-amber-400/50 hover:shadow-2xl hover:shadow-amber-500/10 transition-all duration-300">
+<div class="absolute -right-16 -top-16 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none group-hover:bg-amber-500/20 transition-all duration-500"></div>
+<div class="flex flex-col gap-6 relative z-10">
+<div>
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<span class="text-xs font-mono font-bold text-amber-400 px-2 py-1 rounded bg-amber-400/10 border border-amber-400/30">01 AI RESEARCH</span>
+<span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> Production</span>
+</div>
+<span class="material-symbols-outlined text-secondary group-hover:text-amber-400 group-hover:scale-110 transition-all duration-300">calendar_month</span>
+</div>
+<h4 class="text-2xl font-headline font-bold text-white mb-3 group-hover:text-amber-200 transition-colors">Autonomous Research Agent</h4>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-4">Autonomous research system — enter any topic and the agent decomposes it into targeted search queries, scrapes live web data across 3 fallback search tiers, and synthesizes a cited Markdown report via LLM reasoning. Real-time progress dashboard with one-click report export.</p>
+</div>
+<div class="relative w-full rounded-xl overflow-hidden border border-amber-500/30 bg-surface-container-lowest shadow-2xl">
+<div class="px-3.5 py-2.5 bg-surface-container-high/90 border-b border-white/10 flex items-center justify-between backdrop-blur-md">
+<div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-rose-500/80 inline-block"></span><span class="w-2.5 h-2.5 rounded-full bg-amber-500/80 inline-block"></span><span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80 inline-block"></span></div>
+<div class="px-3 py-0.5 rounded bg-black/40 border border-white/5 text-[10px] font-mono text-zinc-300 flex items-center gap-1.5"><span class="material-symbols-outlined text-[12px] text-amber-400">lock</span> autonomous-research-agent-ioye.onrender.com</div>
+<span class="text-[10px] font-mono text-amber-400 font-semibold px-2 py-0.5 rounded bg-amber-400/10 border border-amber-400/30">LIVE PREVIEW</span>
+</div>
+<div class="relative aspect-[16/9] w-full overflow-hidden bg-[#0b0d10] group/img">
+<img src="images/research-agent.png" alt="Autonomous Research Agent dashboard screenshot" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"/>
+</div>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-2.5 py-1 rounded bg-surface-container-high border border-white/10 text-xs font-mono text-on-surface">Node.js</span>
+<span class="px-2.5 py-1 rounded bg-amber-950/40 border border-amber-400/30 text-xs font-mono text-amber-300">Groq LLM</span>
+<span class="px-2.5 py-1 rounded bg-surface-container-high border border-white/10 text-xs font-mono text-on-surface">Express</span>
+<span class="px-2.5 py-1 rounded bg-amber-950/40 border border-amber-400/30 text-xs font-mono text-amber-300">Web Scraping</span>
+<span class="px-2.5 py-1 rounded bg-surface-container-high border border-white/10 text-xs font-mono text-on-surface">Markdown Reports</span>
+</div>
+</div>
+<div class="flex items-center gap-4 pt-5 mt-6 border-t border-white/10 relative z-10">
+<a class="inline-flex items-center gap-1.5 text-xs font-mono text-amber-300 hover:text-amber-100 font-semibold tracking-wide transition-colors" href="https://autonomous-research-agent-ioye.onrender.com" target="_blank" rel="noopener"><span>Live Demo</span><span class="text-sm">↗</span></a>
+<a class="inline-flex items-center gap-1.5 text-xs font-mono text-on-surface-variant hover:text-white transition-colors" href="https://github.com/sonu0421/autonomous-research-agent" target="_blank" rel="noopener"><span>GitHub</span><span class="text-sm">↗</span></a>
+<a class="inline-flex items-center gap-1.5 text-xs font-mono text-on-surface-variant hover:text-white transition-colors" href="#d-architecture"><span>Architecture</span><span class="text-sm">↗</span></a>
+</div>
+</div>
+<!-- Project 02 (span 5) -->
+<div data-deploy="https://jobfinder-automation.onrender.com" data-name="JobFinder Automation Pipeline" class="tilt-card lg:col-span-5 rounded-2xl bg-surface-container border border-white/10 p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden group hover:border-amber-400/40 hover:shadow-xl hover:shadow-amber-500/10 transition-all duration-300">
+<div class="flex flex-col gap-6 relative z-10">
+<div>
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="text-xs font-mono font-bold text-amber-400 px-2 py-1 rounded bg-white/5 border border-white/10">02 PIPELINE TOOL</span>
+<span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-sky-500/10 text-sky-300 border border-sky-500/20 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse"></span> Cron-Job</span>
+</div>
+<span class="material-symbols-outlined text-secondary group-hover:text-amber-400 group-hover:scale-110 transition-all duration-300">radar</span>
+</div>
+<h4 class="text-xl font-headline font-bold text-white mb-3 group-hover:text-amber-200 transition-colors">JobFinder Automation Pipeline</h4>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-4">Automated crawler that aggregates developer postings from 5 platforms, deduplicates listings, filters via criteria through Node.js webhooks, and delivers instant Telegram alerts directly to candidate feeds.</p>
+</div>
+<div class="relative w-full rounded-xl overflow-hidden border border-white/10 group-hover:border-amber-400/30 bg-surface-container-lowest shadow-2xl">
+<div class="px-3 py-2 bg-surface-container-high/90 border-b border-white/10 flex items-center justify-between backdrop-blur-md">
+<div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span><span class="text-[10px] font-mono text-zinc-200 font-medium">jobfinder-daemon:active</span></div>
+<span class="text-[10px] font-mono text-amber-400/90 px-1.5 py-0.5 rounded bg-amber-400/10 border border-amber-400/25">5 SOURCES LIVE</span>
+</div>
+<div class="relative aspect-[16/9] w-full overflow-hidden bg-[#0a0c0f] group/img">
+<img src="images/jobfinder.png" alt="JobFinder Smart Job Alerts Dashboard screenshot" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"/>
+</div>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-2.5 py-1 rounded bg-surface-container-high border border-white/10 text-xs font-mono text-on-surface">Node.js</span>
+<span class="px-2.5 py-1 rounded bg-surface-container-high border border-white/10 text-xs font-mono text-on-surface">Puppeteer</span>
+<span class="px-2.5 py-1 rounded bg-surface-container-high border border-white/10 text-xs font-mono text-on-surface">Webhooks</span>
+<span class="px-2.5 py-1 rounded bg-amber-950/40 border border-amber-400/30 text-xs font-mono text-amber-300">Telegram Bot API</span>
+</div>
+</div>
+<div class="pt-5 mt-6 border-t border-white/10 relative z-10 flex items-center gap-5">
+<a class="inline-flex items-center gap-1.5 text-xs font-mono text-amber-300 hover:text-amber-100 font-semibold tracking-wide transition-colors" href="https://jobfinder-automation.onrender.com" target="_blank" rel="noopener"><span>Live Demo</span><span class="text-sm">↗</span></a>
+<a class="inline-flex items-center gap-1.5 text-xs font-mono text-on-surface-variant hover:text-white transition-colors" href="https://github.com/sonu0421/JobFinder-Automation" target="_blank" rel="noopener"><span>GitHub Repo</span><span class="text-sm">↗</span></a>
+</div>
+</div>
+<!-- Project 03 (span 12) -->
+<div data-deploy="https://gupshuplive.vercel.app" data-name="Gupshup Realtime Chat" class="tilt-card lg:col-span-12 rounded-2xl bg-surface-container border border-white/10 p-6 sm:p-8 flex flex-col lg:flex-row items-center justify-between gap-8 hover:border-amber-400/40 hover:shadow-2xl hover:shadow-amber-500/10 transition-all duration-300 group">
+<div class="flex-1 flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<span class="text-xs font-mono font-bold text-amber-400 px-2 py-1 rounded bg-white/5 border border-white/10">03 FULL STACK</span>
+<span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Real-Time</span>
+</div>
+<h4 class="text-2xl font-headline font-bold text-white group-hover:text-amber-200 transition-colors">Gupshup Realtime Chat</h4>
+<p class="text-on-surface-variant text-sm leading-relaxed">Low-latency instant messaging application with live presence detection, typing indicators, end-to-end socket events, and instant database synchronization designed for uninterrupted community conversations.</p>
+<div class="flex flex-wrap gap-2 pt-2">
+<span class="px-2.5 py-1 rounded bg-surface-container-high border border-white/10 text-xs font-mono text-on-surface">React</span>
+<span class="px-2.5 py-1 rounded bg-surface-container-high border border-white/10 text-xs font-mono text-on-surface">WebSockets</span>
+<span class="px-2.5 py-1 rounded bg-surface-container-high border border-white/10 text-xs font-mono text-on-surface">Tailwind CSS</span>
+<span class="px-2.5 py-1 rounded bg-amber-950/40 border border-amber-400/30 text-xs font-mono text-amber-300">Instant Presence</span>
+</div>
+<div class="pt-4 flex items-center gap-3">
+<a class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-surface-container-high hover:bg-surface-variant border border-amber-400/40 hover:border-amber-400 text-xs font-mono text-amber-300 hover:text-amber-200 font-semibold tracking-wide transition-all shadow-md hover:-translate-y-0.5 active:scale-95" href="https://gupshuplive.vercel.app" target="_blank" rel="noopener"><span>Live Demo</span><span class="text-sm">↗</span></a>
+<a class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-mono text-on-surface-variant hover:text-white transition-colors" href="https://github.com/sonu0421/mern-gupshup-realtime-chat" target="_blank" rel="noopener"><span>GitHub</span><span class="text-sm">↗</span></a>
+</div>
+</div>
+<div class="w-full lg:w-1/2 shrink-0">
+<div class="relative rounded-xl overflow-hidden border border-white/15 group-hover:border-amber-400/40 bg-surface-container-lowest shadow-2xl">
+<div class="px-3.5 py-2 bg-surface-container-high/90 border-b border-white/10 flex items-center justify-between backdrop-blur-md">
+<div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-rose-500/70 inline-block"></span><span class="w-2.5 h-2.5 rounded-full bg-amber-500/70 inline-block"></span><span class="w-2.5 h-2.5 rounded-full bg-emerald-500/70 inline-block"></span></div>
+<span class="text-[10px] font-mono text-secondary flex items-center gap-1 px-2 py-0.5 rounded bg-black/40"><span class="material-symbols-outlined text-[12px] text-tertiary">forum</span> gupshup.chat/channels</span>
+<span class="text-[10px] font-mono text-emerald-300 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> CONNECTED</span>
+</div>
+<div class="relative aspect-[16/9] w-full overflow-hidden bg-[#0b0d10] group/img">
+<img src="images/gupshup.png" alt="Gupshup realtime chat app screenshot" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-16 border-t border-white/10 relative scroll-mt-16" id="d-experience">
+<div class="flex items-center gap-3 mb-8">
+<span class="text-amber-400 font-mono text-sm tracking-wider font-semibold">03.</span>
+<h2 class="text-xs font-mono uppercase tracking-widest text-secondary font-semibold">EXPERIENCE</h2>
+<div class="h-px bg-white/10 flex-1 ml-4"></div>
+</div>
+<div class="exp-timeline relative pl-8 max-w-3xl">
+<div class="absolute left-[7px] top-2 bottom-2 w-px bg-gradient-to-b from-amber-400/70 via-amber-400/25 to-transparent"></div>
+<div class="exp-rail-fill" data-rail="d"></div>
+<div class="exp-comet" data-rail="d"></div>
+<div class="relative space-y-6">
+<article class="relative">
+<span class="exp-dot absolute -left-8 top-1.5 w-[15px] h-[15px] rounded-full bg-amber-400 shadow-[0_0_12px_rgba(245,158,11,0.9)] ring-4 ring-background"></span>
+<div class="rounded-xl bg-surface-container border border-white/10 p-5 sm:p-6 hover:border-amber-400/40 hover:-translate-y-0.5 transition-all duration-300 group">
+<div class="flex flex-wrap items-center gap-3 mb-2">
+<span class="text-[11px] font-mono font-bold px-2.5 py-1 rounded-full bg-amber-400 text-slate-950">Feb 2026 — Jul 2026</span>
+<span class="text-[10px] font-mono uppercase tracking-widest text-emerald-300 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>Latest</span>
+</div>
+<h3 class="text-lg font-headline font-bold text-white group-hover:text-amber-200 transition-colors">Web Developer & AI Video Creator</h3>
+<p class="text-xs font-mono text-amber-400/90 mt-0.5 mb-3">Swastik Tech Pvt. Ltd.</p>
+<ul class="text-sm text-on-surface-variant space-y-1.5 leading-relaxed">
+<li class="flex gap-2"><span class="text-amber-400 shrink-0">•</span><span>Created and maintained company websites end-to-end in a multitasking role.</span></li>
+<li class="flex gap-2"><span class="text-amber-400 shrink-0">•</span><span>Found and reported bugs across web properties to keep releases stable.</span></li>
+<li class="flex gap-2"><span class="text-amber-400 shrink-0">•</span><span>Generated AI videos for the company's digital content needs.</span></li>
+</ul>
+<div class="flex flex-wrap gap-2 mt-4">
+<span class="px-2.5 py-1 rounded bg-surface-container-high border border-white/10 text-xs font-mono text-on-surface">Web Development</span>
+<span class="px-2.5 py-1 rounded bg-surface-container-high border border-white/10 text-xs font-mono text-on-surface">Bug Testing</span>
+<span class="px-2.5 py-1 rounded bg-amber-950/40 border border-amber-400/30 text-xs font-mono text-amber-300">AI Video</span>
+</div>
+</div>
+</article>
+<article class="relative">
+<span class="exp-dot absolute -left-8 top-1.5 w-[15px] h-[15px] rounded-full bg-amber-400 shadow-[0_0_12px_rgba(245,158,11,0.9)] ring-4 ring-background"></span>
+<div class="rounded-xl bg-surface-container border border-white/10 p-5 sm:p-6 hover:border-amber-400/40 hover:-translate-y-0.5 transition-all duration-300 group">
+<span class="inline-block text-[11px] font-mono font-bold px-2.5 py-1 rounded-full bg-amber-400 text-slate-950 mb-2">Jul 2025 — Dec 2025</span>
+<h3 class="text-lg font-headline font-bold text-white group-hover:text-amber-200 transition-colors">Frontend & AI Developer Intern</h3>
+<p class="text-xs font-mono text-amber-400/90 mt-0.5 mb-3">Galipea Molecules Pvt. Ltd.</p>
+<ul class="text-sm text-on-surface-variant space-y-1.5 leading-relaxed">
+<li class="flex gap-2"><span class="text-amber-400 shrink-0">•</span><span>Built an AI-powered appointment booking chatbot automating client scheduling & responses.</span></li>
+<li class="flex gap-2"><span class="text-amber-400 shrink-0">•</span><span>Developed frontend dashboards for appointments, analytics & chatbot responses.</span></li>
+<li class="flex gap-2"><span class="text-amber-400 shrink-0">•</span><span>Integrated n8n workflows with APIs & databases, collaborating with the backend team.</span></li>
+</ul>
+<div class="flex flex-wrap gap-2 mt-4">
+<span class="px-2.5 py-1 rounded bg-surface-container-high border border-white/10 text-xs font-mono text-on-surface">React</span>
+<span class="px-2.5 py-1 rounded bg-amber-950/40 border border-amber-400/30 text-xs font-mono text-amber-300">n8n Workflow</span>
+<span class="px-2.5 py-1 rounded bg-surface-container-high border border-white/10 text-xs font-mono text-on-surface">Node.js</span>
+</div>
+</div>
+</article>
+<article class="relative">
+<span class="exp-dot absolute -left-8 top-1.5 w-[15px] h-[15px] rounded-full bg-amber-400 shadow-[0_0_12px_rgba(245,158,11,0.9)] ring-4 ring-background"></span>
+<div class="rounded-xl bg-surface-container border border-white/10 p-5 sm:p-6 hover:border-amber-400/40 hover:-translate-y-0.5 transition-all duration-300 group">
+<span class="inline-block text-[11px] font-mono font-bold px-2.5 py-1 rounded-full bg-amber-400 text-slate-950 mb-2">Oct 2024 — Nov 2024</span>
+<h3 class="text-lg font-headline font-bold text-white group-hover:text-amber-200 transition-colors">Web Developer Intern</h3>
+<p class="text-xs font-mono text-amber-400/90 mt-0.5 mb-3">CodeClause</p>
+<ul class="text-sm text-on-surface-variant space-y-1.5 leading-relaxed">
+<li class="flex gap-2"><span class="text-amber-400 shrink-0">•</span><span>Built web applications with HTML, CSS & JavaScript; backend with Node.js, REST APIs & MongoDB.</span></li>
+<li class="flex gap-2"><span class="text-amber-400 shrink-0">•</span><span>Improved UI design, backend logic & integration of full-stack components.</span></li>
+</ul>
+<div class="flex flex-wrap gap-2 mt-4">
+<span class="px-2.5 py-1 rounded bg-surface-container-high border border-white/10 text-xs font-mono text-on-surface">JavaScript</span>
+<span class="px-2.5 py-1 rounded bg-surface-container-high border border-white/10 text-xs font-mono text-on-surface">Node.js</span>
+<span class="px-2.5 py-1 rounded bg-surface-container-high border border-white/10 text-xs font-mono text-on-surface">MongoDB</span>
+</div>
+</div>
+</article>
+<article class="relative">
+<span class="exp-dot absolute -left-8 top-1.5 w-[15px] h-[15px] rounded-full bg-amber-400 shadow-[0_0_12px_rgba(245,158,11,0.9)] ring-4 ring-background"></span>
+<div class="rounded-xl bg-surface-container border border-white/10 p-5 sm:p-6 hover:border-amber-400/40 hover:-translate-y-0.5 transition-all duration-300 group">
+<span class="inline-block text-[11px] font-mono font-bold px-2.5 py-1 rounded-full bg-amber-400 text-slate-950 mb-2">May 2024 — Jul 2024</span>
+<h3 class="text-lg font-headline font-bold text-white group-hover:text-amber-200 transition-colors">GSSoC Contributor — Apprenticeship</h3>
+<p class="text-xs font-mono text-amber-400/90 mt-0.5 mb-3">GirlScript Summer of Code</p>
+<ul class="text-sm text-on-surface-variant space-y-1.5 leading-relaxed">
+<li class="flex gap-2"><span class="text-amber-400 shrink-0">•</span><span>Contributed to open-source projects as part of the GirlScript Summer of Code apprenticeship.</span></li>
+<li class="flex gap-2"><span class="text-amber-400 shrink-0">•</span><span>Developed features and bug fixes in collaboration with project maintainers.</span></li>
+<li class="flex gap-2"><span class="text-amber-400 shrink-0">•</span><span>Gained hands-on experience in software development & project management.</span></li>
+</ul>
+<div class="flex flex-wrap gap-2 mt-4">
+<span class="px-2.5 py-1 rounded bg-surface-container-high border border-white/10 text-xs font-mono text-on-surface">Open Source</span>
+<span class="px-2.5 py-1 rounded bg-surface-container-high border border-white/10 text-xs font-mono text-on-surface">Git & GitHub</span>
+<span class="px-2.5 py-1 rounded bg-surface-container-high border border-white/10 text-xs font-mono text-on-surface">Collaboration</span>
+</div>
+</div>
+</article>
+</div>
+</div>
+</section>
+
+<!-- DESKTOP-ARCH -->
+<section class="py-16 border-t border-white/10 relative scroll-mt-16" id="d-architecture">
+<div class="flex items-center gap-3 mb-3">
+<span class="text-amber-400 font-mono text-sm tracking-wider font-semibold">04.</span>
+<h2 class="text-xs font-mono uppercase tracking-widest text-secondary font-semibold">HOW I BUILD</h2>
+<div class="h-px bg-white/10 flex-1 ml-4"></div>
+</div>
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+<h3 class="text-2xl sm:text-3xl font-headline font-bold text-white tracking-tight">System Architecture & Pipeline Flow</h3>
+<span class="text-xs font-mono text-amber-400/90 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>END-TO-END AUTONOMOUS TOPOLOGY</span>
+</div>
+<div class="relative">
+<div class="hidden md:block absolute top-1/2 left-0 right-0 h-0.5 -translate-y-1/2 overflow-hidden pointer-events-none z-0">
+<div class="w-24 h-full bg-gradient-to-r from-transparent via-amber-400 to-transparent blur-[1px] animate-signal-pulse"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-5 gap-4 relative z-10">
+<div class="rounded-xl bg-surface-container/95 border border-white/10 p-5 flex flex-col justify-between relative group hover:border-amber-400 hover:shadow-xl hover:shadow-amber-500/15 hover:-translate-y-1 transition-all duration-300 backdrop-blur-sm cursor-pointer">
+<div class="flex items-center justify-between mb-4"><span class="text-xs font-mono font-bold text-secondary group-hover:text-amber-300 transition-colors">STAGE 01</span><span class="material-symbols-outlined text-secondary group-hover:text-amber-400 group-hover:rotate-12 transition-all text-sm">touch_app</span></div>
+<div><h5 class="text-sm font-headline font-bold text-white group-hover:text-amber-200 transition-colors mb-1.5">User Interaction</h5><p class="text-xs text-on-surface-variant leading-relaxed">Mobile App / Web Client Input capturing event parameters, forms, and triggers.</p></div>
+<div class="mt-4 pt-3 border-t border-white/5 text-[10px] font-mono text-secondary group-hover:text-amber-400/80 transition-colors flex items-center justify-between"><span>Inbound Dispatch</span><span class="opacity-0 group-hover:opacity-100 transition-opacity font-bold">→</span></div>
+</div>
+<div class="rounded-xl bg-surface-container/95 border border-white/10 p-5 flex flex-col justify-between relative group hover:border-amber-400 hover:shadow-xl hover:shadow-amber-500/15 hover:-translate-y-1 transition-all duration-300 backdrop-blur-sm cursor-pointer">
+<div class="flex items-center justify-between mb-4"><span class="text-xs font-mono font-bold text-secondary group-hover:text-amber-300 transition-colors">STAGE 02</span><span class="material-symbols-outlined text-secondary group-hover:text-amber-400 group-hover:rotate-12 transition-all text-sm">devices</span></div>
+<div><h5 class="text-sm font-headline font-bold text-white group-hover:text-amber-200 transition-colors mb-1.5">Frontend Engine</h5><p class="text-xs text-on-surface-variant leading-relaxed">React / Next.js / Tailwind Interface with optimistic client updates and state buffers.</p></div>
+<div class="mt-4 pt-3 border-t border-white/5 text-[10px] font-mono text-secondary group-hover:text-amber-400/80 transition-colors flex items-center justify-between"><span>Client Render</span><span class="opacity-0 group-hover:opacity-100 transition-opacity font-bold">→</span></div>
+</div>
+<div class="rounded-xl bg-surface-container/95 border border-white/10 p-5 flex flex-col justify-between relative group hover:border-amber-400 hover:shadow-xl hover:shadow-amber-500/15 hover:-translate-y-1 transition-all duration-300 backdrop-blur-sm cursor-pointer">
+<div class="flex items-center justify-between mb-4"><span class="text-xs font-mono font-bold text-secondary group-hover:text-amber-300 transition-colors">STAGE 03</span><span class="material-symbols-outlined text-secondary group-hover:text-amber-400 group-hover:rotate-12 transition-all text-sm">hub</span></div>
+<div><h5 class="text-sm font-headline font-bold text-white group-hover:text-amber-200 transition-colors mb-1.5">API & Webhooks</h5><p class="text-xs text-on-surface-variant leading-relaxed">Node.js Endpoints / Event Handlers validating schema, tokens, and payloads.</p></div>
+<div class="mt-4 pt-3 border-t border-white/5 text-[10px] font-mono text-secondary group-hover:text-amber-400/80 transition-colors flex items-center justify-between"><span>Ingress Layer</span><span class="opacity-0 group-hover:opacity-100 transition-opacity font-bold">→</span></div>
+</div>
+<div class="rounded-xl bg-gradient-to-b from-surface-container to-amber-950/40 border border-amber-400/50 p-5 flex flex-col justify-between relative shadow-lg shadow-amber-500/15 group hover:border-amber-300 hover:shadow-2xl hover:shadow-amber-500/30 hover:-translate-y-1 transition-all duration-300 backdrop-blur-sm cursor-pointer">
+<div class="flex items-center justify-between mb-4"><span class="text-xs font-mono font-bold text-amber-300 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span>STAGE 04 [CORE]</span><span class="material-symbols-outlined text-amber-400 text-sm group-hover:rotate-45 transition-transform">smart_toy</span></div>
+<div><h5 class="text-sm font-headline font-bold text-amber-200 mb-1.5 group-hover:text-amber-100 transition-colors">AI & Automation Layer</h5><p class="text-xs text-zinc-300 leading-relaxed">n8n Orchestrator + OpenAI Function Calling transforming decisions into automated action chains.</p></div>
+<div class="mt-4 pt-3 border-t border-amber-400/25 text-[10px] font-mono text-amber-400 font-medium flex items-center justify-between"><span>Zero-Friction Decision</span><span class="text-amber-300 font-bold">→</span></div>
+</div>
+<div class="rounded-xl bg-surface-container/95 border border-white/10 p-5 flex flex-col justify-between relative group hover:border-amber-400 hover:shadow-xl hover:shadow-amber-500/15 hover:-translate-y-1 transition-all duration-300 backdrop-blur-sm cursor-pointer">
+<div class="flex items-center justify-between mb-4"><span class="text-xs font-mono font-bold text-secondary group-hover:text-amber-300 transition-colors">STAGE 05</span><span class="material-symbols-outlined text-secondary group-hover:text-amber-400 group-hover:rotate-12 transition-all text-sm">send_and_archive</span></div>
+<div><h5 class="text-sm font-headline font-bold text-white group-hover:text-amber-200 transition-colors mb-1.5">Data & Notification</h5><p class="text-xs text-on-surface-variant leading-relaxed">Supabase SQL + Email/SMS Alert Dispatched with immediate delivery verification.</p></div>
+<div class="mt-4 pt-3 border-t border-white/5 text-[10px] font-mono text-secondary group-hover:text-amber-400/80 transition-colors flex items-center justify-between"><span>Persist & Broadcast</span><span class="opacity-0 group-hover:opacity-100 transition-opacity font-bold">✓</span></div>
+</div>
+</div>
+</div>
+</section>
+<!-- DESKTOP-TECH -->
+<section class="py-16 border-t border-white/10 relative scroll-mt-16" id="d-tech-stack">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+<div class="lg:col-span-8 flex flex-col">
+<div class="flex items-center gap-3 mb-3">
+<span class="text-amber-400 font-mono text-sm tracking-wider font-semibold">05.</span>
+<h2 class="text-xs font-mono uppercase tracking-widest text-secondary font-semibold">TECH STACK DIRECTORY</h2>
+</div>
+<h3 class="text-2xl font-headline font-bold text-white tracking-tight mb-8">Tooling Matrix</h3>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-6">
+<div class="flex flex-col gap-3 p-3 rounded-lg hover:bg-white/[0.02] border border-transparent hover:border-white/10 transition-colors">
+<span class="text-xs font-mono font-bold text-amber-400 pb-2 border-b border-white/10">FRONTEND</span>
+<ul class="text-xs font-mono text-on-surface-variant space-y-2">
+<li class="hover:text-amber-300 hover:translate-x-1 transition-all cursor-default">• React.js</li>
+<li class="hover:text-amber-300 hover:translate-x-1 transition-all cursor-default">• Next.js</li>
+<li class="hover:text-amber-300 hover:translate-x-1 transition-all cursor-default">• JavaScript ES6+</li>
+<li class="hover:text-amber-300 hover:translate-x-1 transition-all cursor-default">• Tailwind CSS</li>
+</ul>
+</div>
+<div class="flex flex-col gap-3 p-3 rounded-lg hover:bg-white/[0.02] border border-transparent hover:border-white/10 transition-colors">
+<span class="text-xs font-mono font-bold text-amber-400 pb-2 border-b border-white/10">BACKEND</span>
+<ul class="text-xs font-mono text-on-surface-variant space-y-2">
+<li class="hover:text-amber-300 hover:translate-x-1 transition-all cursor-default">• Node.js</li>
+<li class="hover:text-amber-300 hover:translate-x-1 transition-all cursor-default">• Express.js</li>
+<li class="hover:text-amber-300 hover:translate-x-1 transition-all cursor-default">• REST APIs</li>
+<li class="hover:text-amber-300 hover:translate-x-1 transition-all cursor-default">• WebSockets</li>
+</ul>
+</div>
+<div class="flex flex-col gap-3 p-3 rounded-lg hover:bg-white/[0.02] border border-transparent hover:border-amber-400/20 bg-amber-950/10 transition-colors">
+<span class="text-xs font-mono font-bold text-amber-400 pb-2 border-b border-white/10">AI & AUTO</span>
+<ul class="text-xs font-mono text-on-surface-variant space-y-2">
+<li class="hover:text-amber-300 hover:translate-x-1 transition-all cursor-default">• n8n Workflows</li>
+<li class="hover:text-amber-300 hover:translate-x-1 transition-all cursor-default">• OpenAI APIs</li>
+<li class="hover:text-amber-300 hover:translate-x-1 transition-all cursor-default">• Prompt Chains</li>
+<li class="hover:text-amber-300 hover:translate-x-1 transition-all cursor-default">• Puppeteer Scrapers</li>
+</ul>
+</div>
+<div class="flex flex-col gap-3 p-3 rounded-lg hover:bg-white/[0.02] border border-transparent hover:border-white/10 transition-colors">
+<span class="text-xs font-mono font-bold text-amber-400 pb-2 border-b border-white/10">DB & DEVOPS</span>
+<ul class="text-xs font-mono text-on-surface-variant space-y-2">
+<li class="hover:text-amber-300 hover:translate-x-1 transition-all cursor-default">• Supabase</li>
+<li class="hover:text-amber-300 hover:translate-x-1 transition-all cursor-default">• PostgreSQL / MySQL</li>
+<li class="hover:text-amber-300 hover:translate-x-1 transition-all cursor-default">• Git & GitHub</li>
+<li class="hover:text-amber-300 hover:translate-x-1 transition-all cursor-default">• Docker Basics</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="lg:col-span-4 flex flex-col">
+<div class="flex items-center gap-3 mb-3">
+<span class="text-amber-400 font-mono text-sm tracking-wider font-semibold">06.</span>
+<h2 class="text-xs font-mono uppercase tracking-widest text-secondary font-semibold">EDUCATION</h2>
+</div>
+<h3 class="text-2xl font-headline font-bold text-white tracking-tight mb-8">Academic Foundation</h3>
+<div class="rounded-xl bg-surface-container border border-white/10 p-6 flex flex-col justify-between h-full hover:border-amber-400/40 hover:-translate-y-1 hover:shadow-xl hover:shadow-amber-500/10 transition-all duration-300 group">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-mono text-amber-400 font-bold">2021 — 2025</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-mono bg-surface-container-high text-on-surface-variant border border-white/5 group-hover:border-amber-400/30 transition-colors">DEGREE</span>
+</div>
+<h4 class="text-base font-headline font-bold text-white mb-2 group-hover:text-amber-200 transition-colors">B.Tech in Computer Science & Engineering</h4>
+<p class="text-xs text-on-surface-variant leading-relaxed mb-4">Focus on Distributed Computing, Full Stack Web Architecture, and Practical Automation Systems.</p>
+</div>
+<div class="pt-4 border-t border-white/5 flex items-center justify-between text-[11px] font-mono text-secondary">
+<span>Specialization: Web & Agentic AI</span>
+<span class="text-emerald-400 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>Class of 2025</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- DESKTOP-CONTACT -->
+<section class="py-16 border-t border-white/10 relative scroll-mt-16" id="d-contact">
+<div class="rounded-2xl bg-gradient-to-r from-surface-container via-surface-container-high to-surface-container border border-amber-500/30 p-8 sm:p-12 relative overflow-hidden shadow-2xl hover:border-amber-400/50 transition-colors group">
+<div class="absolute -right-20 top-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-amber-500/15 blur-[100px] pointer-events-none group-hover:scale-125 transition-transform duration-700"></div>
+<div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 relative z-10">
+<div class="max-w-2xl flex flex-col gap-3">
+<div class="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-amber-400">
+<span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+<span>AVAILABLE FOR IMMEDIATE ROLES</span>
+</div>
+<h2 class="text-3xl sm:text-4xl xl:text-5xl font-headline font-extrabold tracking-tight text-white leading-tight">LET'S BUILD SOMETHING USEFUL.</h2>
+<p class="text-sm sm:text-base text-on-surface-variant leading-relaxed">Currently open to high-impact web engineering roles and freelance AI automation pipelines. Let's discuss your next release or automated infrastructure.</p>
+<div class="flex flex-wrap items-center gap-3 pt-2">
+<a class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-lowest border border-white/10 hover:border-amber-400/50 text-xs font-mono text-on-surface hover:text-amber-300 hover:-translate-y-0.5 transition-all shadow-sm" href="https://github.com/sonu0421" target="_blank" rel="noopener">
+<span class="material-symbols-outlined text-[15px]">code</span><span>@sonu0421</span>
+</a>
+<a class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-lowest border border-white/10 hover:border-amber-400/50 text-xs font-mono text-on-surface hover:text-amber-300 hover:-translate-y-0.5 transition-all shadow-sm" href="https://www.linkedin.com/in/sonu-kumar-15b055283/" target="_blank" rel="noopener">
+<span class="material-symbols-outlined text-[15px]">work</span><span>/in/sonu-kumar-15b055283</span>
+</a>
+<a class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-lowest border border-white/10 hover:border-[#25D366]/60 text-xs font-mono text-on-surface hover:text-[#25D366] hover:-translate-y-0.5 transition-all shadow-sm" href="https://wa.me/917678114905?text=Hi%20Sonu!%20I%20saw%20your%20portfolio%20and%20wanted%20to%20connect." target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+<span class="material-symbols-outlined text-[15px]">chat</span><span>WhatsApp</span>
+</a>
+</div>
+</div>
+<div class="shrink-0 w-full lg:w-[380px]">
+<form class="contact-form flex flex-col gap-3 rounded-2xl bg-surface-container-lowest/80 border border-white/10 p-5 backdrop-blur-sm">
+<span class="text-xs font-mono uppercase tracking-widest text-amber-400">Drop a message</span>
+<input type="text" name="name" required maxlength="80" placeholder="Your name" aria-label="Your name" class="w-full bg-surface-container border border-white/10 rounded-lg px-4 py-2.5 text-sm text-on-surface placeholder:text-secondary focus:outline-none focus:border-amber-400/60 transition-colors">
+<input type="email" name="email" required maxlength="120" placeholder="Your email" aria-label="Your email" class="w-full bg-surface-container border border-white/10 rounded-lg px-4 py-2.5 text-sm text-on-surface placeholder:text-secondary focus:outline-none focus:border-amber-400/60 transition-colors">
+<textarea name="message" required maxlength="2000" rows="4" placeholder="What do you want to build?" aria-label="Your message" class="w-full bg-surface-container border border-white/10 rounded-lg px-4 py-2.5 text-sm text-on-surface placeholder:text-secondary focus:outline-none focus:border-amber-400/60 transition-colors resize-none"></textarea>
+<input type="text" name="_honey" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true">
+<button type="submit" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 active:scale-95 text-slate-950 font-bold text-sm tracking-wide transition-all duration-300 shadow-lg shadow-amber-400/20 hover:shadow-amber-400/40 disabled:opacity-60 disabled:pointer-events-none">
+<span>Send Message</span><span class="text-base">→</span>
+</button>
+<p class="form-status text-xs font-mono min-h-[18px] text-secondary"></p>
+</form>
+<p class="text-xs font-mono text-secondary mt-3 lg:text-right">or write directly: <a class="text-amber-300 hover:text-amber-200 transition-colors" href="mailto:sonu.kmr102002@gmail.com">sonu.kmr102002@gmail.com</a></p>
+</div>
+</div>
+</div>
+</section>
+</div><!-- /desktop flex -->
+</div><!-- /desktop max-w-7xl -->
+</div><!-- /desktop lg:block -->
+<!-- END: DesktopExperience -->
+</main>
+<footer class="hidden lg:block w-full border-t border-outline-variant bg-surface-container-lowest mt-24 relative z-10">
+<div class="max-w-7xl mx-auto px-8 py-12 flex flex-col md:flex-row items-center justify-between gap-6">
+<div class="flex flex-col items-center md:items-start gap-1 text-xs text-on-surface-variant">
+<span class="text-on-surface font-medium">© 2026 Sonu Kumar. Engineered with purpose.</span>
+<span class="text-secondary">Obsidian & Warm Editorial System</span>
+</div>
+<div class="flex items-center gap-6 text-xs text-on-surface-variant">
+<a class="hover:text-amber-300 transition-colors" href="https://github.com/sonu0421" target="_blank" rel="noopener">GitHub</a>
+<a class="hover:text-amber-300 transition-colors" href="https://www.linkedin.com/in/sonu-kumar-15b055283/" target="_blank" rel="noopener">LinkedIn</a>
+<a class="hover:text-amber-300 transition-colors" href="mailto:sonu.kmr102002@gmail.com">Email</a>
+<a class="hover:text-amber-300 transition-colors" href="https://wa.me/917678114905?text=Hi%20Sonu!%20I%20saw%20your%20portfolio%20and%20wanted%20to%20connect." target="_blank" rel="noopener">WhatsApp</a>
+</div>
+</div>
+</footer>
+
+
+<footer class="lg:hidden max-w-md mx-auto px-4 mt-16 pt-6 border-t border-borderWarm/50 text-center font-mono text-xs text-slate-500 space-y-1.5">
+  <p>© 2026 Sonu Kumar. Engineered with purpose.</p>
+  <p class="text-[11px] text-slate-600">Dark Editorial System • Real-time 3D Ecosystem • Powered by Three.js</p>
+</footer>
+
+<script>
+/* ============ 3D ORBITAL ECOSYSTEM (Three.js) ============ */
+function initOrbital3D(opts) {
+  const container = document.getElementById(opts.containerId);
+  const canvas = document.getElementById(opts.canvasId);
+  if (!container || !canvas || typeof THREE === 'undefined') return;
+  const labelLayer = opts.labelLayerId ? document.getElementById(opts.labelLayerId) : null;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const NODES = opts.nodes;
+
+  // Labels: build fresh buttons (mobile) or reuse existing ones (desktop)
+  let nodeBtns;
+  if (opts.reuseLabelSelector) {
+    nodeBtns = Array.from(container.querySelectorAll(opts.reuseLabelSelector));
+  } else {
+    nodeBtns = NODES.map(n => {
+      const b = document.createElement('button');
+      b.className = 'orbit-node px-2.5 py-1 rounded-md bg-cardBg/90 backdrop-blur border border-borderWarm text-[10px] font-mono text-goldChampagne flex items-center gap-1.5 shadow-sm hover:border-amberAccent hover:text-amberLight active:scale-95 transition-colors cursor-pointer';
+      b.setAttribute('aria-label', n.name + ' Architecture Node');
+      b.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amberAccent inline-block"></span>' + n.name;
+      if (labelLayer) labelLayer.appendChild(b);
+      return b;
+    });
+  }
+  nodeBtns.forEach((b, i) => {
+    b.style.position = 'absolute';
+    b.style.transform = 'translate(-50%,-50%)';
+    b.style.whiteSpace = 'nowrap';
+    b.style.pointerEvents = 'auto';
+    b.addEventListener('click', (e) => { e.stopPropagation(); opts.onNodeClick(NODES[i], b); });
+  });
+
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  } catch (e) {
+    labelLayer.style.display = 'none';
+    container.insertAdjacentHTML('beforeend', '<p class="absolute inset-0 flex items-center justify-center text-[11px] font-mono text-slate-500">3D unavailable — CSS orbit fallback</p>');
+    return;
+  }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 60);
+  camera.position.set(0, 0.35, opts.cameraZ || 4.4);
+
+  // Amber glow texture (canvas-generated)
+  function glowTexture() {
+    const c = document.createElement('canvas'); c.width = c.height = 128;
+    const ctx = c.getContext('2d');
+    const g = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+    g.addColorStop(0, 'rgba(251,191,36,1)');
+    g.addColorStop(0.35, 'rgba(245,158,11,0.55)');
+    g.addColorStop(1, 'rgba(245,158,11,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, 128, 128);
+    return new THREE.CanvasTexture(c);
+  }
+  const glowTex = glowTexture();
+
+  // AI core: solid amber sphere + additive glow sprite (skipped on desktop — HTML core label is used there)
+  let core = null, coreGlow = null;
+  if (opts.showCore3D !== false) {
+    core = new THREE.Mesh(
+      new THREE.SphereGeometry(0.52, 48, 48),
+      new THREE.MeshBasicMaterial({ color: 0xf59e0b })
+    );
+    scene.add(core);
+    coreGlow = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, color: 0xfbbf24, transparent: true, opacity: 0.85, blending: THREE.AdditiveBlending, depthWrite: false }));
+    coreGlow.scale.set(2.4, 2.4, 1);
+    scene.add(coreGlow);
+  }
+
+  // Rotating dashed rings around the 3D core (mobile instance)
+  let coreRing1 = null, coreRing2 = null;
+  if (core) {
+    const mkRing = (r, op) => new THREE.Mesh(
+      new THREE.TorusGeometry(r, 0.006, 8, 96),
+      new THREE.MeshBasicMaterial({ color: 0xfbbf24, transparent: true, opacity: op })
+    );
+    coreRing1 = mkRing(0.8, 0.5); coreRing1.rotation.x = Math.PI / 2.5;
+    coreRing2 = mkRing(1.02, 0.28); coreRing2.rotation.x = Math.PI / 1.7; coreRing2.rotation.y = 0.6;
+    scene.add(coreRing1, coreRing2);
+  }
+
+  // Orbit rings (tilted)
+  const orbitGroup = new THREE.Group();
+  const tiltDeg = opts.tiltDeg || 68;
+  const orbitR = opts.orbitRadius || 1.15;
+  orbitGroup.rotation.x = THREE.MathUtils.degToRad(tiltDeg);
+  scene.add(orbitGroup);
+  function ring(radius, tube, opacity) {
+    const m = new THREE.Mesh(
+      new THREE.TorusGeometry(radius, tube, 12, 128),
+      new THREE.MeshBasicMaterial({ color: 0xf59e0b, transparent: true, opacity })
+    );
+    orbitGroup.add(m);
+    return m;
+  }
+  const ring1 = ring(orbitR, 0.008, 0.5);
+  const ring2 = ring(orbitR + 0.2, 0.006, 0.28);
+  ring2.rotation.x = Math.PI / 2; ring2.rotation.y = 0;
+  // Vertical orbit frame (same plane as ring2)
+  const vGroup = new THREE.Group();
+  vGroup.rotation.x = Math.PI / 2;
+  vGroup.rotation.y = 0;
+  orbitGroup.add(vGroup);
+
+  // Satellite nodes (3D spheres + glow)
+  const sats = NODES.map(n => {
+    const grp = new THREE.Group();
+    const dot = new THREE.Mesh(new THREE.SphereGeometry(0.085, 24, 24), new THREE.MeshBasicMaterial({ color: n.color }));
+    const glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, color: n.color, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending, depthWrite: false }));
+    glow.scale.set(0.55, 0.55, 1);
+    grp.add(dot); grp.add(glow);
+    grp.userData.baseAngle = n.angle;
+    grp.userData.radius = n.radius || orbitR;
+    (n.vertical ? vGroup : orbitGroup).add(grp);
+    return grp;
+  });
+  const vSats = sats.filter((s, i) => NODES[i].vertical);
+
+  // Comet trails behind satellites (fading vertex-colored line strips)
+  const TRAIL_LEN = 26;
+  const cHead = new THREE.Color(0xfbbf24), cTail = new THREE.Color(0x000000);
+  const trails = sats.map(() => {
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(TRAIL_LEN * 3), 3));
+    const cols = new THREE.BufferAttribute(new Float32Array(TRAIL_LEN * 3), 3);
+    for (let k = 0; k < TRAIL_LEN; k++) {
+      const c = cHead.clone().lerp(cTail, k / (TRAIL_LEN - 1));
+      cols.setXYZ(k, c.r, c.g, c.b);
+    }
+    g.setAttribute('color', cols);
+    const line = new THREE.Line(g, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending, depthWrite: false }));
+    line.frustumCulled = false;
+    scene.add(line);
+    return { line, pts: [] };
+  });
+  const trailV = new THREE.Vector3();
+
+  // Starfield particles
+  const starGeo = new THREE.BufferGeometry();
+  const starCount = 260;
+  const pos = new Float32Array(starCount * 3);
+  for (let i = 0; i < starCount; i++) {
+    const r = 3 + Math.random() * 7, t = Math.random() * Math.PI * 2, p = Math.acos(2 * Math.random() - 1);
+    pos[i*3] = r * Math.sin(p) * Math.cos(t); pos[i*3+1] = r * Math.sin(p) * Math.sin(t); pos[i*3+2] = r * Math.cos(p);
+  }
+  starGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xfbbf24, size: 0.02, transparent: true, opacity: 0.55 }));
+  scene.add(stars);
+
+  // Sizing
+  function resize() {
+    const w = container.clientWidth, h = container.clientHeight;
+    if (!w || !h) return;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h; camera.updateProjectionMatrix();
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Mouse parallax
+  let mx = 0, my = 0, tx = 0, ty = 0;
+  container.addEventListener('pointermove', e => {
+    const r = container.getBoundingClientRect();
+    tx = ((e.clientX - r.left) / r.width - 0.5) * 2;
+    ty = ((e.clientY - r.top) / r.height - 0.5) * 2;
+  });
+  container.addEventListener('pointerleave', () => { tx = 0; ty = 0; });
+
+  // Raycast clicks on 3D satellites
+  const ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
+  container.addEventListener('click', e => {
+    if (e.target.closest('button')) return;
+    const r = container.getBoundingClientRect();
+    ptr.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+    ptr.y = -((e.clientY - r.top) / r.height) * 2 + 1;
+    ray.setFromCamera(ptr, camera);
+    const hits = ray.intersectObjects(sats.map(s => s.children[0]));
+    if (hits.length) {
+      const idx = sats.findIndex(s => s.children[0] === hits[0].object);
+      if (idx >= 0) opts.onNodeClick(NODES[idx], nodeBtns[idx]);
+    }
+  });
+
+  // Visibility pause
+  let visible = true;
+  new IntersectionObserver(en => { visible = en[0].isIntersecting; }, { threshold: 0.05 }).observe(container);
+
+  const clock = new THREE.Clock();
+  const projV = new THREE.Vector3();
+  let spin = 0, spinV = 0;
+
+  function projectLabels() {
+    const w = container.clientWidth, h = container.clientHeight;
+    sats.forEach((s, i) => {
+      s.children[0].getWorldPosition(projV);
+      const behind = projV.clone().applyMatrix4(camera.matrixWorldInverse).z > -0.2;
+      projV.project(camera);
+      const x = (projV.x * 0.5 + 0.5) * w, y = (-projV.y * 0.5 + 0.5) * h;
+      const btn = nodeBtns[i];
+      btn.style.left = x + 'px'; btn.style.top = y + 'px';
+      btn.style.opacity = behind ? 0.35 : 1;
+      btn.style.zIndex = behind ? 10 : 30;
+    });
+  }
+
+  function frame() {
+    requestAnimationFrame(frame);
+    if (!visible || document.hidden) return;
+    const dt = Math.min(clock.getDelta(), 0.05);
+    if (!reduceMotion) {
+      spin += dt * 0.28;
+      spinV -= dt * 0.4;
+      orbitGroup.rotation.z = spin;
+      // vertical-orbit satellites ride ring2's plane
+      vSats.forEach(s => {
+        const a = s.userData.baseAngle + spinV;
+        const rr = s.userData.radius;
+        s.position.set(Math.cos(a) * rr, Math.sin(a) * rr, 0);
+      });
+      ring2.rotation.z -= dt * 0.12;
+      const pulse = 1 + Math.sin(clock.elapsedTime * 1.8) * 0.06;
+      if (core) core.scale.set(pulse, pulse, pulse);
+      if (coreGlow) coreGlow.material.opacity = 0.7 + Math.sin(clock.elapsedTime * 1.8) * 0.15;
+      if (coreRing1) { coreRing1.rotation.z += dt * 0.55; coreRing2.rotation.z -= dt * 0.38; }
+      stars.rotation.y += dt * 0.015;
+      // advance comet trails
+      sats.forEach((s, i) => {
+        s.children[0].getWorldPosition(trailV);
+        const tr = trails[i], arr = tr.line.geometry.getAttribute('position').array;
+        tr.pts.unshift(trailV.x, trailV.y, trailV.z);
+        if (tr.pts.length > TRAIL_LEN * 3) tr.pts.length = TRAIL_LEN * 3;
+        for (let k = 0; k < TRAIL_LEN; k++) {
+          const o = k * 3;
+          arr[o] = tr.pts[o] !== undefined ? tr.pts[o] : trailV.x;
+          arr[o+1] = tr.pts[o+1] !== undefined ? tr.pts[o+1] : trailV.y;
+          arr[o+2] = tr.pts[o+2] !== undefined ? tr.pts[o+2] : trailV.z;
+        }
+        tr.line.geometry.getAttribute('position').needsUpdate = true;
+      });
+    }
+    mx += (tx - mx) * 0.06; my += (ty - my) * 0.06;
+    camera.position.x = mx * 0.5;
+    camera.position.y = 0.35 - my * 0.35;
+    camera.lookAt(0, 0, 0);
+    renderer.render(scene, camera);
+    projectLabels();
+  }
+  // position satellites on their ring radius
+  sats.forEach(s => {
+    const rr = s.userData.radius;
+    s.position.set(Math.cos(s.userData.baseAngle) * rr, Math.sin(s.userData.baseAngle) * rr, 0);
+  });
+  frame();
+}
+
+/* Mobile orbital (amber 3D, buttons created by JS) */
+initOrbital3D({
+  containerId: 'orbitalEcosystem',
+  canvasId: 'orbitCanvas',
+  labelLayerId: 'orbitLabels',
+  cameraZ: 4.4,
+  tiltDeg: 60,
+  orbitRadius: 1.4,
+  showCore3D: true,
+  nodes: [
+    { name: 'React',         desc: 'Frontend UI runtime & virtual DOM synchronization',        angle: Math.PI * 0.75,  color: 0xfbbf24 },
+    { name: 'n8n',           desc: 'Self-hosted autonomous automation & webhook routing',       angle: Math.PI * 1.25,  color: 0xf59e0b },
+    { name: 'Node.js',       desc: 'Asynchronous event-loop backend & webhook microservices',  angle: Math.PI * 0.25,  color: 0xfbbf24 },
+    { name: 'Supabase / DB', desc: 'Real-time PostgreSQL engine & row-level security telemetry', angle: -Math.PI * 0.25, color: 0xf59e0b },
+    { name: 'TypeScript',    desc: 'Type-safe JavaScript & end-to-end API contracts',          angle: Math.PI * 0.0,   color: 0x60a5fa, radius: 1.6, vertical: true },
+    { name: 'MongoDB',       desc: 'NoSQL document database & aggregation pipelines',          angle: Math.PI * 1.0,   color: 0x4ade80, radius: 1.6, vertical: true },
+    { name: 'Python',        desc: 'AI scripting, automation & data processing runtime',       angle: Math.PI * 1.5,   color: 0xfacc15, radius: 1.6, vertical: true },
+  ],
+  onNodeClick: (n) => handleNodeClick(n.name, n.desc)
+});
+
+/* Desktop orbital (reuses the .satellite-node buttons as 3D labels) */
+initOrbital3D({
+  containerId: 'orbit-container-d',
+  canvasId: 'orbitCanvasD',
+  reuseLabelSelector: '.satellite-node',
+  cameraZ: 4.4,
+  tiltDeg: 60,
+  orbitRadius: 1.4,
+  showCore3D: false,
+  nodes: [
+    { name: 'React',         angle: Math.PI * 0.75,  color: 0xfbbf24 },
+    { name: 'Node.js',       angle: Math.PI * 0.25,  color: 0xfbbf24 },
+    { name: 'n8n Flow',      angle: Math.PI * 1.25,  color: 0xf59e0b },
+    { name: 'Supabase / DB', angle: -Math.PI * 0.25, color: 0xf59e0b },
+    { name: 'TypeScript',    angle: Math.PI * 0.0,   color: 0x60a5fa, radius: 1.6, vertical: true },
+    { name: 'MongoDB',       angle: Math.PI * 1.0,   color: 0x4ade80, radius: 1.6, vertical: true },
+    { name: 'Python',        angle: Math.PI * 1.5,   color: 0xfacc15, radius: 1.6, vertical: true },
+  ],
+  onNodeClick: (n, btn) => handleDesktopNodeClick(btn)
+});
+
+/* Desktop hover + click telemetry readout */
+function handleDesktopNodeClick(btn) {
+  const latencyVal = document.getElementById('latency-val-d');
+  const telemetryRoute = document.getElementById('telemetry-route-d');
+  if (!btn || !latencyVal || !telemetryRoute) return;
+  const lat = btn.getAttribute('data-latency');
+  const route = btn.getAttribute('data-route');
+  if (lat) latencyVal.textContent = lat;
+  if (route) { telemetryRoute.textContent = route; telemetryRoute.classList.add('text-amber-300'); }
+}
+(function initDesktopTelemetry() {
+  const nodes = document.querySelectorAll('#orbit-container-d .satellite-node');
+  const latencyVal = document.getElementById('latency-val-d');
+  const telemetryRoute = document.getElementById('telemetry-route-d');
+  if (!nodes.length || !latencyVal || !telemetryRoute) return;
+  const defaultLatency = '<140ms';
+  const defaultRoute = 'Sync: Realtime Event Broker';
+  nodes.forEach(node => {
+    node.addEventListener('mouseenter', () => {
+      const lat = node.getAttribute('data-latency');
+      const route = node.getAttribute('data-route');
+      if (lat) latencyVal.textContent = lat;
+      if (route) { telemetryRoute.textContent = route; telemetryRoute.classList.add('text-amber-300'); }
+    });
+    node.addEventListener('mouseleave', () => {
+      latencyVal.textContent = defaultLatency;
+      telemetryRoute.textContent = defaultRoute;
+      telemetryRoute.classList.remove('text-amber-300');
+    });
+  });
+  const coreD = document.getElementById('core-engine-d');
+  if (coreD) coreD.addEventListener('click', (e) => {
+    e.stopPropagation();
+    latencyVal.textContent = '9ms';
+    telemetryRoute.textContent = 'Sonu Kumar: the human core — everything here orbits around him';
+    telemetryRoute.classList.add('text-amber-300');
+  });
+})();
+
+/* ============ EXPERIENCE TIMELINE SCROLL FX ============ */
+(function initExpTimelines() {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const timelines = document.querySelectorAll('.exp-timeline');
+  if (!timelines.length) return;
+
+  // Light up each dot as its card scrolls into view
+  const dotObs = new IntersectionObserver((entries) => {
+    entries.forEach(en => {
+      const dot = en.target.querySelector('.exp-dot');
+      if (dot) dot.classList.toggle('exp-lit', en.isIntersecting);
+    });
+  }, { threshold: 0.35 });
+  timelines.forEach(tl => tl.querySelectorAll('article').forEach(a => dotObs.observe(a)));
+
+  if (reduceMotion) {
+    timelines.forEach(tl => {
+      const fill = tl.querySelector('.exp-rail-fill');
+      const comet = tl.querySelector('.exp-comet');
+      if (fill) fill.style.height = 'calc(100% - 16px)';
+      if (comet) comet.style.display = 'none';
+    });
+    return;
+  }
+
+  function update() {
+    const vh = window.innerHeight;
+    timelines.forEach(tl => {
+      const fill = tl.querySelector('.exp-rail-fill');
+      const comet = tl.querySelector('.exp-comet');
+      if (!fill) return;
+      const r = tl.getBoundingClientRect();
+      const H = tl.clientHeight;
+      if (!H) return;
+      const p = Math.max(0, Math.min(1, (vh * 0.8 - r.top) / (vh * 0.3 + H)));
+      const y = 8 + p * (H - 16);
+      fill.style.height = Math.max(0, y - 8) + 'px';
+      if (comet) comet.style.top = y + 'px';
+    });
+  }
+  let ticking = false;
+  function onScroll() {
+    if (!ticking) { requestAnimationFrame(() => { update(); ticking = false; }); ticking = true; }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  update();
+})();
+
+
+
+/* ============ BIG HEADLINE TYPEWRITER ============ */
+(function initHeadlineTypewriter() {
+  const LINES = [
+    [ { t:'I BUILD ' }, { t:'DIGITAL SYSTEMS', grad:1 }, { t:' THAT ' }, { t:'THINK & AUTOMATE.', grad:1 } ],
+    [ { t:"I'M A " }, { t:'FRONTEND DEVELOPER.', grad:1 } ],
+    [ { t:"I'M AN " }, { t:'AI AGENT DEVELOPER.', grad:1 } ],
+    [ { t:"I'M A " }, { t:'FULL-STACK DEVELOPER.', grad:1 } ],
+  ];
+  const els = [document.getElementById('tw-headline-d'), document.getElementById('tw-headline-m')].filter(Boolean);
+  if (!els.length) return;
+  const lens = LINES.map(l => l.reduce((a, s) => a + s.t.length, 0));
+  function render(li, count) {
+    els.forEach(el => {
+      el.textContent = '';
+      let rem = count;
+      LINES[li].forEach(seg => {
+        const take = Math.min(rem, seg.t.length);
+        if (take > 0) {
+          const sp = document.createElement('span');
+          if (seg.grad) sp.className = 'tw-grad';
+          sp.textContent = seg.t.slice(0, take);
+          el.appendChild(sp);
+          rem -= take;
+        }
+      });
+      const caret = document.createElement('span');
+      caret.className = 'tw-caret';
+      caret.setAttribute('aria-hidden', 'true');
+      el.appendChild(caret);
+    });
+  }
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    render(0, lens[0]);
+    els.forEach(el => { const c = el.querySelector('.tw-caret'); if (c) c.remove(); });
+    return;
+  }
+  let li = 0, ci = 0, del = false;
+  (function tick() {
+    const total = lens[li];
+    if (!del && ci >= total) { render(li, total); del = true; setTimeout(tick, 2100); return; }
+    if (del && ci <= 2) { del = false; li = (li + 1) % LINES.length; ci = 0; render(li, 0); setTimeout(tick, 500); return; }
+    ci += del ? -2 : 1;
+    render(li, Math.max(0, Math.min(total, ci)));
+    setTimeout(tick, del ? 16 : 55);
+  })();
+})();
+
+/* ============ HERO ORBIT 3D TILT + CHIP PARALLAX (desktop) ============ */
+(function heroTilt() {
+  const cont = document.getElementById('orbit-container-d');
+  if (!cont) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!window.matchMedia('(pointer: fine)').matches) return;
+  const card = cont.parentElement;
+  let raf = null, rx = 0, ry = 0, crx = 0, cry = 0;
+  function apply() {
+    crx += (rx - crx) * 0.12; cry += (ry - cry) * 0.12;
+    cont.style.transform = 'perspective(1100px) rotateX(' + crx.toFixed(2) + 'deg) rotateY(' + cry.toFixed(2) + 'deg)';
+    if (Math.abs(rx - crx) > 0.01 || Math.abs(ry - cry) > 0.01) raf = requestAnimationFrame(apply);
+    else raf = null;
+  }
+  function kick() { if (!raf) raf = requestAnimationFrame(apply); }
+  card.addEventListener('pointermove', e => {
+    const r = card.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    ry = px * 10; rx = -py * 8;
+    kick();
+  });
+  card.addEventListener('pointerleave', () => { rx = 0; ry = 0; kick(); });
+})();
+
+/* ============ CLICKABLE PROJECT CARDS -> deploy URL ============ */
+(function initProjectCards() {
+  document.querySelectorAll('[data-deploy]').forEach(card => {
+    const url = card.getAttribute('data-deploy');
+    const label = card.getAttribute('data-name') || 'project';
+    card.style.cursor = 'pointer';
+    card.setAttribute('role', 'link');
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('aria-label', 'Open live demo: ' + label);
+    card.setAttribute('title', 'Open live demo: ' + label);
+    function open() { window.open(url, '_blank', 'noopener'); }
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('a, button, summary, input, textarea, select')) return;
+      open();
+    });
+    card.addEventListener('keydown', (e) => {
+      if ((e.key === 'Enter' || e.key === ' ') && e.target === card) { e.preventDefault(); open(); }
+    });
+  });
+})();
+
+/* ============ CONTACT FORM (FormSubmit AJAX -> email) ============ */
+(function initContactForms() {
+  const forms = document.querySelectorAll('.contact-form');
+  if (!forms.length) return;
+  forms.forEach(form => {
+    const status = form.querySelector('.form-status');
+    const btn = form.querySelector('button[type="submit"]');
+    function setStatus(msg, isErr) {
+      if (!status) return;
+      status.textContent = msg;
+      status.classList.toggle('text-red-400', !!isErr);
+      status.classList.toggle('text-emerald-400', !isErr);
+    }
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      if (data.get('_honey')) return;
+      const name = (data.get('name') || '').toString().trim();
+      const email = (data.get('email') || '').toString().trim();
+      const message = (data.get('message') || '').toString().trim();
+      if (!name || !email || !message) { setStatus('Please fill all fields.', true); return; }
+      btn.disabled = true;
+      setStatus('Sending…', false);
+      try {
+        const res = await fetch('https://formsubmit.co/ajax/sonu.kmr102002@gmail.com', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ name, email, message, _subject: 'Portfolio contact from ' + name, _captcha: 'false', _template: 'table' })
+        });
+        if (!res.ok) throw new Error('send failed');
+        form.reset();
+        setStatus('Message sent ✓ — I\'ll get back to you soon!', false);
+      } catch (err) {
+        setStatus('Could not send. Email me directly: sonu.kmr102002@gmail.com', true);
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  });
+})();
+
+/* ============ 3D TILT CARDS ============ */
+(function initTilt() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (window.matchMedia('(hover: none)').matches) return;
+  document.querySelectorAll('.tilt-card').forEach(card => {
+    card.addEventListener('pointermove', e => {
+      const r = card.getBoundingClientRect();
+      const rx = ((e.clientY - r.top) / r.height - 0.5) * -10;
+      const ry = ((e.clientX - r.left) / r.width - 0.5) * 10;
+      card.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-2px)`;
+    });
+    card.addEventListener('pointerleave', () => { card.style.transform = ''; });
+  });
+})();
+
+/* ============ ORIGINAL INTERACTIONS ============ */
+function handleNodeClick(nodeName, description) {
+  const statusElem = document.getElementById('nodeTelemetryStatus');
+  if (!statusElem) return;
+  statusElem.innerHTML =
+    '<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-amberAccent/15 border border-amberAccent/40 text-[10px] font-mono text-amberLight">' +
+    '<span class="w-1.5 h-1.5 rounded-full bg-amberAccent animate-ping"></span>' +
+    '<span class="font-bold">' + nodeName + ':</span>' +
+    '<span class="text-slate-200">' + description + '</span></div>';
+}
+function toggleTelemetryDetail() {
+  const statusElem = document.getElementById('nodeTelemetryStatus');
+  if (!statusElem) return;
+  statusElem.innerHTML =
+    '<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-surfaceAlt border border-amberAccent/60 text-[10px] font-mono text-goldChampagne">' +
+    '<span class="w-2 h-2 rounded-full bg-amberAccent animate-pulse"></span>' +
+    '<span>AI Core: Autonomous agent reasoning cycle active (LLM triage + vector routing)</span></div>';
+}
+function activateStep(element, message) {
+  document.querySelectorAll('.pipeline-step').forEach(step => {
+    step.classList.remove('bg-surface/90', 'border-amberAccent/50');
+  });
+  element.classList.add('bg-surface/90', 'border-amberAccent/50');
+  const pipelineStatus = document.getElementById('pipelineStatusText');
+  if (pipelineStatus) { pipelineStatus.innerText = message; pipelineStatus.classList.add('text-amberLight'); }
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) { entry.target.classList.add('is-visible'); obs.unobserve(entry.target); }
+    });
+  }, { rootMargin: '0px 0px -40px 0px', threshold: 0.12 });
+  document.querySelectorAll('.reveal-on-scroll').forEach(s => observer.observe(s));
+
+  let activeIndex = 0;
+  const steps = document.querySelectorAll('.pipeline-step');
+  if (steps.length > 0 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    setInterval(() => {
+      if (document.hidden) return;
+      steps.forEach((s, idx) => {
+        if (idx === activeIndex) {
+          s.classList.add('ring-1', 'ring-amberAccent/40');
+          setTimeout(() => s.classList.remove('ring-1', 'ring-amberAccent/40'), 1800);
+        }
+      });
+      activeIndex = (activeIndex + 1) % steps.length;
+    }, 3500);
+  }
+});
+</script>
+</body>
+</html>
